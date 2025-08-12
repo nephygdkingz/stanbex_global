@@ -1,0 +1,226 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    label{
+        color: #fff !important;
+    }
+    .bg-danger{
+        background: #16243e !important;
+        /* background: linear-gradient(90deg, #004d6e 0%, #00accc 100%) !important; */
+    }
+    .btn-primary{
+        background: linear-gradient(90deg, #004d6e 70%, #00accc 100%) !important;
+        border-color: #004d6e !important;
+    }
+</style>
+<main>
+    <!-- about breadcrumb area start -->
+    <section class="breadcrumb__area pt-165 pb-150 p-relative z-index-1 fix" data-bg-color="#16243E">
+        <div class="breadcrumb__bg" data-background="{% static 'frontend/assets/img/breadcrumb/bg.png' %}"></div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="breadcrumb__content">
+                    <h3 class="breadcrumb__title">Register</h3>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="breadcrumb__content">
+                        <div class="breadcrumb__list text-center text-sm-end">
+                            <span><a href="{% url 'frontend:home' %}">Home</a></span>
+                            <span class="dvdr"><i class="fa-regular fa-angle-right"></i></span>
+                            <span>Open Account</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- about breadcrumb area end --> 
+
+    <div class="container pt-80 pb-80 mb-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card bg-danger">
+                    <h3 class="text-center text-light py-3 mt-2">Create Account</h3>
+                    <div class="card-body">
+                        <form action="" class="js-submit-spinner" method="post">
+                            {% csrf_token %}>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                    {{ form.email.errors }}
+                                    <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">Email Address:</label>
+                                    {{ form.email }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                    {{ form.password1.errors }}
+                                    <label for="{{ form.password1.id_for_label }}" class="form-label fw-bold">Password:</label>
+                                    {{ form.password1 }}
+                                    <div id="{{ form.birthdate.id_for_label }}" class="form-text">at least more than 12 characters</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 ">
+                                    <div class="mb-3">
+                                    {{ form.password2.errors }}
+                                    <label for="{{ form.password2.id_for_label }}" class="form-label fw-bold">Password Confirmation:</label>
+                                    {{ form.password2 }}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mt-md-5">
+                                    <div class="form-check mb-3">
+                                        <label for="show-pass" class="form-check-label fw-bold">Show Password:</label>
+                                        <input class="form-check-input"  id="show-pass" type="checkbox" onclick="myFunction()">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                    {{ form.first_name.errors }}
+                                    <label for="{{ form.first_name.id_for_label }}" class="form-label fw-bold">First Name:</label>
+                                    {{ form.first_name }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                    {{ form.last_name.errors }}	
+                                    <label for="{{ form.last_name.id_for_label }}" class="form-label fw-bold">Last Name:</label>
+                                    {{ form.last_name }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        {{ form.birth_date.errors }}
+                                    <label for="{{ form.birth_date.id_for_label }}" class="form-label fw-bold">Birthdate:</label>
+                                    {{ form.birth_date}}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        {{ ad_form.street_address.errors }}
+                                    <label for="{{ ad_form.street_address.id_for_label }}" class="form-label fw-bold">Street Address:</label>
+                                    {{ ad_form.street_address }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        {{ ad_form.city.errors }}
+                                    <label for="{{ ad_form.city.id_for_label }}" class="form-label fw-bold">City:</label>
+                                    {{ ad_form.city }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        {{ ad_form.postal_code.errors }}
+                                    <label for="{{ ad_form.postal_code.id_for_label }}" class="form-label fw-bold">Postal Code:</label>
+                                    {{ ad_form.postal_code }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ ad_form.country.errors }}
+                                    <label for="{{ ad_form.country.id_for_label }}" class="form-label fw-bold">Country:</label>
+                                    {{ ad_form.country }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.title.errors }}
+                                    <label for="{{ form.title.id_for_label }}" class="form-label fw-bold ms-2">Title:</label>
+                                    {{ form.title }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                    {{ form.gender.errors }}
+                                    <label for="{{ form.gender.id_for_label }}" class="form-label fw-bold ms-2">Gender:</label>
+                                    {{ form.gender }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ ad_form.account_type.errors }}
+                                    <label for="{{ ad_form.account_type.id_for_label }}" class="form-label fw-bold ms-2">Account Type:</label>
+                                    {{ ad_form.account_type }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ ad_form.currency.errors }}
+                                    <label for="{{ ad_form.currency.id_for_label }}" class="form-label fw-bold ms-2">Currency:</label>
+                                    {{ ad_form.currency }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary w-100 fw-bold">
+                                    <span class="btn-text">Submit</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- cta area start -->
+    <section class="tp-cta-area p-relative">
+        <div class="tp-cta-bg"></div>
+        <div class="container">
+            <div class="tp-cta-bg-wrapper p-relative" data-background="{% static 'frontend/assets/img/cta/bg-shape.png' %}">
+                <div class="row">
+                    <div class="col-lg-6">
+                    <h3 class="tp-cta-title">Get notified about the event! <br> Subscribe today</h3>
+                    </div>
+                    <div class="col-lg-6">
+                    <div class="tp-cta-email p-relative">
+                        <input type="email" placeholder="Email Address">
+                        <button> <span><i class="fa-solid fa-envelope"></i> Subscribe</span></button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- cta area end -->
+</main>
+
+<script>
+	function myFunction() {
+	  var x = document.getElementById("id_password1");
+	  var y = document.getElementById("id_password2")
+	  if (x.type === "password") {
+	    x.type = "text";
+	    y.type = "text";
+	  } else {
+	    x.type = "password";
+	    y.type = "password";
+	  }
+	}
+</script>
+{% endblock %}

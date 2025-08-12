@@ -1,0 +1,164 @@
+{% load static %}
+<!-- header area start -->
+<header class="tp-header-area p-relative">
+  <div class="tp-header-box p-relative">
+    <div class="tp-header-logo p-relative">
+      <span class="tp-header-logo-bg"></span>
+      <a href="{% url 'frontend:home' %}">
+        <img src="{% static 'frontend/assets/img/logo/logo.png' %}" alt="" />
+      </a>
+    </div>
+    <div class="tp-header-wrapper-inner header__sticky p-relative">
+      <div class="tp-header-top d-none d-xl-flex">
+        <div class="tp-header-top-info">
+          <a
+            href="https://maps.app.goo.gl/VX8K5AcShxoDNgpX7"
+            target="_blank"
+            ><span><i class="fa-sharp fa-solid fa-location-dot"></i></span>147 Aptos Ave, San Francisco, CA 94127, United States</a
+          >
+        </div>
+        <div
+          class="tp-header-top-right d-flex justify-content-end align-items-center"
+        >
+          <!-- <div class="header-social">
+            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+          </div> -->
+        </div>
+      </div>
+      <div
+        class="tp-header-main-menu d-flex align-items-center justify-content-between"
+      >
+        <div class="tp-main-menu d-none d-xl-block">
+          <nav class="tp-main-menu-content">
+            <ul>
+              <li class="">
+                <a href="{% url 'frontend:home' %}">Home</a>
+              </li>
+              <li><a href="{% url 'frontend:about' %}">About Us</a></li>
+              <li class="">
+                <a href="{% url 'frontend:home' %}">Services</a>
+              </li>
+              <li><a href="{% url 'frontend:contact' %}">Contact</a></li>
+              <li class="">
+                <a href="{% url 'account:register' %}">Open Account</a>
+              </li>
+              <li class="">
+                <a href="blog-classic.html">Sign In</a>
+              </li>
+              
+            </ul>
+          </nav>
+        </div>
+        <div
+          class="tp-header-main-right d-flex align-items-center justify-content-xl-end"
+        >
+          <div class="tp-header-contact d-xl-flex align-items-center d-none">
+            <div
+              class="tp-header-contact-search search-open-btn d-none d-xxl-block"
+            >
+              <span><i class="fa-solid fa-magnifying-glass"></i></span>
+            </div>
+            <div class="tp-header-contact-inner d-flex align-items-center">
+              <div class="tp-header-contact-icon">
+                <span><i class="fa-solid fa-phone"></i></span>
+              </div>
+              <div class="tp-header-contact-content">
+                <p>Customer Care:</p>
+                <span><a href="tel:555-0111">(629) 555-0129</a></span>
+              </div>
+            </div>
+          </div>
+          <div class="tp-header-sticky-hamburger d-xl-none offcanvas-open-btn">
+            <button class="hamburger-btn">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tp-header-btn">
+      <a class="tp-btn d-none d-xl-block" href="contact.html"
+        >Sign In <i class="fa-regular fa-arrow-right"></i
+      ></a>
+      <div
+        class="tp-header-main-right-hamburger-btn d-xl-none offcanvas-open-btn"
+      >
+        <button class="hamburger-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- header area end -->
+
+
+<!-- sticky header start -->
+      <header id="header-sticky" class="tp-header-main-sticky p-relative">
+         <div class="tp-header-space-2">
+            <div class="container-fluid">
+               <div class="row align-items-center">
+                  <div class="col-xl-3 col-6">
+                     <div class="tp-header-logo-2 p-relative">
+                        <a href="index.html">
+                           <img src="{% static 'frontend/assets/img/logo/logo-black.png' %}" alt="">
+                        </a>
+                     </div>
+                  </div>
+                  <div class="col-lg-6 d-none d-xl-block">
+                     <div class="tp-main-menu home-2 d-none d-xl-block">
+                        <nav class="tp-main-menu-content">
+                           <ul>
+                              <li class="">
+                                 <a href="{% url 'frontend:home' %}">Home</a>
+                              </li>
+                              <li><a href="{% url 'frontend:about' %}">About Us</a></li>
+                              <li class=""><a href="{% url 'frontend:home' %}">Services</a>
+                              </li>
+                              <li><a href="{% url 'frontend:contact' %}">Contact</a></li>
+                              <li class=""><a href="{% url 'account:register' %}">Open Account</a>
+                              </li>
+                              <li class="">
+                                <a href="">Sign In</a>
+                              </li>
+                           </ul>
+                        </nav>
+                     </div>
+                  </div>
+                  <div class="col-xl-3 col-6">
+                     <div class="tp-header-main-right-2 d-flex align-items-center justify-content-xl-end">
+                        <div class="tp-header-contact-2 d-flex align-items-center">
+                           <div class="tp-header-contact-search search-open-btn d-none d-xxl-block">
+                              <span><i class="fa-solid fa-magnifying-glass"></i></span>
+                           </div>
+                           <div class="tp-header-contact-inner d-none d-xl-flex align-items-center">
+                              <div class="tp-header-contact-icon">
+                                 <span><i class="fa-solid fa-phone"></i></span>
+                              </div>
+                              <div class="tp-header-contact-content">
+                                 <p>Customer Care Line:</p>
+                                 <span><a href="tel:555-0111">(629) 555-0129</a></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tp-header-main-right-hamburger-btn d-xl-none offcanvas-open-btn text-end">
+                           <button class="hamburger-btn">
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </header>
+      <!-- sticky header end -->
