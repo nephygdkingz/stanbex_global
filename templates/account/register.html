@@ -14,6 +14,12 @@
         background: linear-gradient(90deg, #004d6e 70%, #00accc 100%) !important;
         border-color: #004d6e !important;
     }
+    .errorlist {
+        color: rgb(241, 4, 4);
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 </style>
 <main>
     <!-- about breadcrumb area start -->
@@ -46,12 +52,15 @@
                 <div class="card bg-danger">
                     <h3 class="text-center text-light py-3 mt-2">Create Account</h3>
                     <div class="card-body">
+                        {% include '../alerts/messages_alert.html' %}
+                        {% include "../alerts/form_errors.html" with form=form %}
+                        {% include "../alerts/form_errors.html" with form=ad_form %}
                         <form action="" class="js-submit-spinner" method="post">
                             {% csrf_token %}>
                             <hr>
 
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4 text-light">
                                     <div class="mb-3">
                                     {{ form.email.errors }}
                                     <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">Email Address:</label>

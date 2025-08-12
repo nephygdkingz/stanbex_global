@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Submit form
-      //   form.submit();
+      form.submit();
     });
   });
 });
