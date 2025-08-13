@@ -2,6 +2,7 @@ import time
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
 
@@ -122,3 +123,9 @@ def resendOtp(request):
 
     user = get_object_or_404(MyUser, id=pk)
     return handle_resend(request, user)
+
+
+@login_required(login_url='account:login')
+def logoutUser(request):
+    logout(request)
+    return redirect('account:login')

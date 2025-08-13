@@ -1,0 +1,111 @@
+{% extends './base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="other_content">
+    <div class="container">
+        <div class="overall_transaction_cards">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card p-3 top-card mb-3 md-md-0">
+                        <h6 class="card-title">Total Income & Spend Statistics</h6>
+                        <p>Daily information about transactional statistics</p>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="progress-container depo">
+                                    <div
+                                    class="progress-bar deposits"
+                                    id="progress-bar-1"
+                                    ></div>
+                                    <div class="percentage" id="percentage-1">0%</div>
+                                    <div class="loan-text">Deposits</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="progress-container">
+                                    <div
+                                    class="progress-bar withdraw"
+                                    id="progress-bar-2"
+                                    ></div>
+                                    <div class="percentage" id="percentage-2">0%</div>
+                                    <div class="loan-text">Withdrawers</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-bar-3"></div>
+                                    <div class="percentage" id="percentage-3">0%</div>
+                                    <div class="loan-text">Gross Debit</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card p-3 top-card">
+                    <h6 class="card-title mb-4">
+                        Total Blanace & Ledger Statistics
+                    </h6>
+                    <div class="row">
+                        <div class="col-4">
+                            <p class="text-success mb-1">Balance</p>
+                            <h5 class="balance-ledger">{{request.user.account.currency}}{{request.user.account.balance|intcomma}}</h5>
+                            <p class="text-danger mb-1">Ledger Balance</p>
+                            <h5 class="balance-ledger">{{request.user.account.currency}}{{ledger_balance|intcomma}}</h5>
+                        </div>
+                        <div class="col-8">
+                            <div class="chart-placeholder mt-2" style="height: 120px">
+                                <img src="{% static 'images/linechart-one.jpg' %}" alt="chart" class="img-fluid" style="height: 100%; width: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- marqueewidget start -->
+        {% include './included/marquee_widgetme.html' %}
+        <!-- marqueewidget end -->
+
+        <div class="row mt-4">
+            <div class="col-md-8 mb-4 mb-md-0">
+                <div class="card p-3">
+                    <h6 class="card-title">Transaction Statistics</h6>
+                    <div class="chart-placeholder">
+                        <canvas id="myChart" width="800"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card wavy-card">
+                    <div class="main-wavy px-3 pt-2 pb-2">
+                        <h6 class="card-title small">Available Balance:</h6>
+                        <p class="text-light small">Updated: {{request.user.last_login}}</p>
+                        <h5>{{request.user.account.currency}}{{request.user.account.balance|intcomma}}</h5>
+                    </div>
+                    
+                    <div class="chart-placeholder2">
+                        <svg viewBox="0 0 500 200">
+                            <path d="M 0 50 C 150 150 300 0 500 80 L 500 0 L 0 0" fill="#2307be"></path>
+                            <path d="M 0 50 C 150 150 330 -30 500 50 L 500 0 L 0 0" fill="#2307be" opacity="0.8"></path>
+                           <path d="M 0 50 C 215 150 250 0 500 100 L 500 0 L 0 0" fill="#000" opacity="0.1"></path>
+                        </svg>
+                        <div class="barchartme">
+                            <div class="chartme-container">
+                                <canvas id="myBarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

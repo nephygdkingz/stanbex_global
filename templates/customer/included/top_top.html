@@ -1,0 +1,52 @@
+<div class="container-fluid bg-primary mx-0 top_content">
+    <div class="row">
+      <div class="col-12">
+        <div class="dashboard-header">
+          <div class="row">
+            <div class="col-md-8">
+              <h4>Dashboard</h4>
+              <p> 
+                Welcome: {{request.user.get_full_name}} | 
+                <span>
+                  Logged User IP:
+                  {{user_ip_address}}
+                </span> 
+              </p>
+              <p id="last-login" data-time="{{ request.user.last_login|date:'c' }}">
+                Date/Time: {{ request.user.last_login }}
+              </p>
+              <!-- <p id="last-login">Date/Time: {{request.user.last_login}}</p> -->
+            </div>
+            <div class="col-md-4 mt-5">
+              <div class="">
+                {% if request.user.status == 'suspended' %}
+                  <a href="#" class="btn btn-outline-warning btn-sm text-white px-4">E-Statement</a>
+                  <a class="btn btn-info btn-sm" href="#">Funds Transfer</a>
+                {% else %}
+                  <a href="" class="btn btn-outline-warning btn-sm text-white px-4">E-Statement</a>
+                  <a class="btn btn-info btn-sm">Funds Transfer</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Convert the time using JavaScript -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const lastLoginElement = document.getElementById("last-login");
+    const utcTimestamp = lastLoginElement.getAttribute("data-time"); // Correctly extract only the time
+
+    if (utcTimestamp) {
+      const date = new Date(utcTimestamp); // Convert to JS Date object
+      const localDateString = date.toLocaleDateString();
+      const localTimeString = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+      // Update the HTML to show the local time
+      lastLoginElement.textContent = `Last Login: ${localDateString}, ${localTimeString}`;
+    }
+  });
+</script>

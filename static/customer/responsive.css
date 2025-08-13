@@ -1,0 +1,20 @@
+@media (max-width: 991px) {
+  .sidebar {
+    margin-left: -240px;
+  }
+  .main-content {
+    margin-left: 0px;
+  }
+
+  .dashboard-header h4 {
+    font-size: 17px;
+    font-weight: bold;
+  }
+  .dashboard-header p {
+    font-size: 12px;
+    margin: 0;
+  }
+  .other_content {
+    padding-inline: 2px;
+  }
+}

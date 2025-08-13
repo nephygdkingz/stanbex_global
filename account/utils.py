@@ -51,7 +51,7 @@ def handle_successful_otp(request, user):
     elif user.status == "suspended":
         return redirect('customer:suspended')
 
-    return redirect('customer:customer_dashboard')
+    return redirect('customer:dashboard')
 
 
 RESEND_COOLDOWN_SECONDS = 30

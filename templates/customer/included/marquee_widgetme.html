@@ -1,0 +1,109 @@
+{% load static %}
+
+<style>
+    /* Container styles */
+    .ticker-container {
+        overflow: hidden;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 10px 10px;
+        white-space: nowrap;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Marquee animation */
+    .ticker {
+        display: inline-flex;
+        animation: scroll 25s linear infinite;
+    }
+
+    /* Scroll animation */
+    @keyframes scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+    
+    /* Ticker item styling */
+    .ticker-item {
+        display: inline-flex;
+        align-items: center;
+        margin: 0 20px;
+    }
+    
+    /* Symbol logo */
+    .symbol-logo {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
+    
+    /* Stock title styling */
+    .ticker-title {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    
+    /* Price styling */
+    .ticker-price {
+        color: #008000;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<div class="ticker-container mt-4">
+<div class="ticker" id="ticker">
+    <!-- Placeholder for dynamically generated ticker items, doubled for infinite scrolling -->
+</div>
+</div>
+
+<script>
+// Array of symbols with title and price data
+const tickerItems = [
+    { symbol: 'S&P 500 Index', price: '4,510.33', logo: '{% static "customer/images/maq_img/SP500.jpg" %}' },
+    { symbol: 'US 100 Cash CFD', price: '15,203.24', logo: '{% static "customer/images/maq_img/us_flag.jpeg" %}' },
+    { symbol: 'EUR to USD', price: '1.17', logo: '{% static "customer/images/maq_img/euroflag.jpg" %}' },
+    { symbol: 'EUR to YEN', price: '$41,256', logo: '{% static "customer/images/maq_img/euroflag.jpg" %}' },
+    { symbol: 'USD to YEN', price: '$2,912', logo: '{% static "customer/images/maq_img/us_flag.jpeg" %}' }
+];
+
+const ticker = document.getElementById('ticker');
+
+// Function to create ticker items
+function createTickerItems(items) {
+    items.forEach(item => {
+        const tickerItem = document.createElement('div');
+        tickerItem.className = 'ticker-item';
+
+        // Logo element
+        const logo = document.createElement('img');
+        logo.className = 'symbol-logo';
+        logo.src = item.logo;
+        logo.alt = item.symbol;
+
+        // Title element
+        const title = document.createElement('span');
+        title.className = 'ticker-title';
+        title.textContent = item.symbol;
+
+        // Price element
+        const price = document.createElement('span');
+        price.className = 'ticker-price';
+        price.textContent = item.price;
+
+        // Append elements to ticker item
+        tickerItem.appendChild(logo);
+        tickerItem.appendChild(title);
+        tickerItem.appendChild(price);
+        ticker.appendChild(tickerItem);
+    });
+}
+
+// Add ticker items twice for continuous scrolling effect
+createTickerItems(tickerItems);
+createTickerItems(tickerItems); // duplicate the content
+</script>
