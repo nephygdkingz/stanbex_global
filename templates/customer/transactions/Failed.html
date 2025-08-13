@@ -1,0 +1,22 @@
+{% extends '../base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="other_content">
+	<div class="container py-5">
+		<div class="row align-item-cnter justify-content-center">
+			<div class="col-md-6">
+				<div class="card">
+					<h5 class="text-center text-danger pt-3">Transaction Failed</h5>
+					<hr>
+					<!-- <p class="px-5 lead">Dear {{request.user.first_name}} {{request.user.last_name}},</p> -->
+					<p class="px-5 py-0">Your Transaction Failed due to unrecognized ip address. Please try again or contact our support team for more information.</p>
+					<hr>
+					<a href="{% url 'customer:dashboard' %}" class="btn btn-secondary btn-sm fw-bold w-100 text-white"><i class="fa-solid fa-arrow-left"></i> Go back to Dashboard</a>
+				</div>		
+			</div>		
+		</div>
+	</div>
+</div>
+{% endblock %}

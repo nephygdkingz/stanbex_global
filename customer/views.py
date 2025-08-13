@@ -213,27 +213,6 @@ class LocalTransferView(CustomerTransactionCreateMixin):
             print(f"Email not sent: {e}")
 
 
-
-@login_required(login_url='account:login')
-@check_suspended_user
-def transactionComplete(request):
-    pk = request.session.get('pk')
-    if not pk:
-        messages.error(request, "No transaction to display.")
-        return redirect('customer:local_transfer')  # e.g., dashboard
-
-    current_transaction = Transaction.objects.filter(
-        account=request.user.account, pk=pk
-    ).first()
-
-    if not current_transaction:
-        messages.error(request, "Transaction not found.")
-        return redirect('customer:local_transfer')
-
-    context = {'transaction': current_transaction}
-    return render(request, 'customer/transactions/complete.html', context)
-
-
 @login_required(login_url='account:login')
 @check_suspended_user
 def transactionVerify(request):
@@ -322,3 +301,29 @@ def transactionVerify(request):
         return redirect(redirect_map[transaction.status])
 
     return render(request, 'customer/transactions/verify.html', {'required_code': required_code})
+
+
+@login_required(login_url='account:login')
+@check_suspended_user
+def transactionComplete(request):
+    pk = request.session.get('pk')
+    if not pk:
+        messages.error(request, "No transaction to display.")
+        return redirect('customer:local_transfer')  # e.g., dashboard
+
+    current_transaction = Transaction.objects.filter(
+        account=request.user.account, pk=pk
+    ).first()
+
+    if not current_transaction:
+        messages.error(request, "Transaction not found.")
+        return redirect('customer:local_transfer')
+
+    context = {'transaction': current_transaction}
+    return render(request, 'customer/transactions/complete.html', context)
+
+
+@login_required(login_url='account:login')
+@check_suspended_user
+def transactionFailed(request):
+    return render(request, 'customer/transactions/Failed.html')

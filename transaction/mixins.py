@@ -18,9 +18,9 @@ class CustomerTransactionCreateMixin(LoginRequiredMixin, CreateView):
             return reverse_lazy('customer:verify')
 
         status_url_map = {
-            'Pending': 'transaction:pending',
-            'Fail': 'transaction:failed',
-            'Success': 'transaction:complete',
+            'Pending': 'customer:pending',
+            'Fail': 'customer:failed',
+            'Success': 'customer:complete',
         }
         return reverse_lazy(
             status_url_map.get(self.request.user.transfer_status, 'customer:complete')
