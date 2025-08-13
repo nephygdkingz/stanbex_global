@@ -1,3 +1,4 @@
+import time
 from django.utils.timezone import now
 from django.contrib.auth import login
 from django.contrib import messages
@@ -41,3 +42,32 @@ def handle_successful_otp(request, user):
         user.otp.save()  # regenerate OTP for next login
         login(request, user)
         return redirect('customer:customer_dashboard')
+    
+
+RESEND_COOLDOWN_SECONDS = 30
+MAX_RESENDS_PER_SESSION = 5
+
+def send_otp_with_cooldown(request, user):
+    """
+    Sends an OTP to the user if cooldown has passed.
+    Returns True if OTP sent, False if blocked by cooldown.
+    """
+    current_ts = time.time()
+    last_resend_ts = request.session.get('last_resend_time')
+
+    # Cooldown check
+    if last_resend_ts and (current_ts - last_resend_ts) < RESEND_COOLDOWN_SECONDS:
+        remaining = int(RESEND_COOLDOWN_SECONDS - (current_ts - last_resend_ts))
+        messages.warning(request, f"Please wait {remaining} seconds before requesting a new OTP.")
+        return False
+
+    # Cooldown passed → regenerate and send OTP
+    user.otp.regenerate()
+    send_otp_email(user)  # make sure this is imported
+
+    # Update session flags
+    request.session['otp_sent'] = True
+    request.session['last_resend_time'] = current_ts
+
+    messages.success(request, "A new OTP has been sent to your email.")
+    return True
