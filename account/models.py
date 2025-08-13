@@ -31,7 +31,7 @@ class MyUser(AbstractUser):
         return f'{self.first_name} {self.last_name}'
 	
     def get_full_name(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.first_name} {self.last_name}-{self.email}'
     
 
 class Profile(models.Model):
@@ -79,7 +79,8 @@ def user_account_post_save(sender, instance, created,*args, **kwargs):
         f_nums = random.choices(nums, k=1)
         r = f_nums[0]
         final_r = str(int(r) + instance.id)
-        instance.account_no = final_r[7:17]
+        instance.account_no = final_r[1:7]
+        # instance.account_no = final_r[7:17] for posgres
         instance.save()
 
 post_save.connect(user_account_post_save, sender=UserBankAccount)

@@ -46,7 +46,7 @@
                 <a href="{% url 'account:register' %}">Open Account</a>
               </li>
               <li class="">
-                <a href="blog-classic.html">Sign In</a>
+                <a href="{% url 'account:login' %}">Sign In</a>
               </li>
               
             </ul>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="tp-header-btn">
-      <a class="tp-btn d-none d-xl-block" href="contact.html"
+      <a class="tp-btn d-none d-xl-block" href="{% url 'account:login' %}"
         >Sign In <i class="fa-regular fa-arrow-right"></i
       ></a>
       <div
@@ -107,7 +107,7 @@
                <div class="row align-items-center">
                   <div class="col-xl-3 col-6">
                      <div class="tp-header-logo-2 p-relative">
-                        <a href="index.html">
+                        <a href="{% url 'frontend:home' %}">
                            <img src="{% static 'frontend/assets/img/logo/logo-black.png' %}" alt="">
                         </a>
                      </div>
@@ -126,7 +126,7 @@
                               <li class=""><a href="{% url 'account:register' %}">Open Account</a>
                               </li>
                               <li class="">
-                                <a href="">Sign In</a>
+                                <a href="{% url 'account:login' %}">Sign In</a>
                               </li>
                            </ul>
                         </nav>

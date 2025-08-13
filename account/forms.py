@@ -32,7 +32,6 @@ class UserRegistrationForm(UserCreationForm):
                 field.widget.attrs.update({'class': 'form-control'})
 
 
-
 class UserBankAccountForm(forms.ModelForm):
 
     class Meta:
