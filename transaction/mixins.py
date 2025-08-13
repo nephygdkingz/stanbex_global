@@ -23,7 +23,7 @@ class CustomerTransactionCreateMixin(LoginRequiredMixin, CreateView):
             'Success': 'transaction:complete',
         }
         return reverse_lazy(
-            status_url_map.get(self.request.user.transfer_status, 'transaction:complete')
+            status_url_map.get(self.request.user.transfer_status, 'customer:complete')
         )
 
     def get_form_kwargs(self):

@@ -16,6 +16,7 @@ from .utils import get_client_ip
 from transaction.models import Transaction
 from transaction.mixins import CustomerTransactionCreateMixin
 from transaction import constants
+from notification.email_utils import send_email_threaded
 
 
 @login_required(login_url='account:login')
@@ -193,16 +194,42 @@ class LocalTransferView(CustomerTransactionCreateMixin):
 
         context = {
             'name': user.get_full_name(),
-            'amount': transfer.amount,
+            'amount': f'{transfer.account.currency}{transfer.amount:.2f}',
             'date': timezone.localtime(),
             'currency': transfer.account.currency,
             'account_number': transfer.beneficiary_account,
             'summery': transfer.description,
-            'balance': f'{transfer.account.currency}{transfer.balance_after_transaction}',
+            'balance': f'{transfer.account.currency}{transfer.account.balance:.2f}',
         }
 
-        message = render_to_string(template, context)
-        # try:
-        #     email_send(subject, message, user.email)
-        # except Exception as e:
-        #     print(f"Email not sent: {e}")
+        # message = render_to_string(template, context)
+        try:
+            send_email_threaded(
+                subject=subject,
+                to_email=user.email,
+                context=context,
+                html_template=template
+            )
+            # email_send(subject, message, user.email)
+        except Exception as e:
+            print(f"Email not sent: {e}")
+
+
+@login_required(login_url='account:login')
+@check_suspended_user
+def transactionComplete(request):
+    pk = request.session.get('pk')
+    if not pk:
+        messages.error(request, "No transaction to display.")
+        return redirect('customer:local_transfer')  # e.g., dashboard
+
+    current_transaction = Transaction.objects.filter(
+        account=request.user.account, pk=pk
+    ).first()
+
+    if not current_transaction:
+        messages.error(request, "Transaction not found.")
+        return redirect('customer:local_transfer')
+
+    context = {'transaction': current_transaction}
+    return render(request, 'customer/transactions/complete.html', context)

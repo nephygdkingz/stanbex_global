@@ -10,4 +10,5 @@ urlpatterns = [
 
     # transfer
     path("account/local-transfer/", views.LocalTransferView.as_view(), name="local_transfer"),
+    path('transaction/completed/', views.transactionComplete, name='complete'),
 ]

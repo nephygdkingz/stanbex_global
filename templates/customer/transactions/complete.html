@@ -1,0 +1,65 @@
+{% extends '../base.html' %}
+
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<div class="other_content">
+	<div class="container py-4">
+		<div class="row align-item-cnter justify-content-center">
+			<div class="col-md-6">
+				<div class="card">
+					<h4 class="text-center text-success pt-4 mb-4">Transaction Successful</h4>
+					
+					<div class="table-responsive px-3">
+						<p class="fw-bold mb-0">Details</p>
+						<hr>
+						<table class="table table-sm">
+						<tbody>
+							<tr>
+							<td><strong>Bank Name:</strong></td>
+							<td>{{transaction.beneficiary_bank}}</td>
+							</tr>
+							<tr>
+							<td><strong>Account Name:</strong></td>
+							<td>{{transaction.beneficiary_name}}</td>
+							</tr>
+							<tr>					      
+							<td><strong>Account Number:</strong></td>
+							<td>{{transaction.beneficiary_account}}</td>
+							</tr>
+							<tr>					      
+							<td><strong>Amount:</strong> </td>
+							<td>{{request.user.account.currency}}{{transaction.amount|intcomma}}</td>
+							</tr>
+							<tr>					      
+							<td><strong>Description:</strong></td>
+							<td>{{transaction.description}}</td>
+							</tr>
+							<tr>					      
+							<td><strong>Transaction Date:</strong></td>
+							<td>{{transaction.transaction_date}}</td>
+							</tr>
+							<tr>					      
+							<td><strong></strong></td>
+							<td><strong></strong></td>
+							</tr>
+							<tr>					      
+							<td><strong>New Balance:</strong></td>
+							<td><strong>{{request.user.account.currency}}{{transaction.balance_after_transaction|intcomma}} </strong></td>
+							</tr>
+						</tbody>
+						</table>
+
+						<hr>
+						<!-- <button class="btn btn-info fw-bold w-100 mb-2"><i class="fa-solid fa-arrow-up-from-bracket"></i> Download Receipt</button> -->
+						<a href="{% url 'customer:dashboard' %}" class="btn btn-secondary fw-bold w-100"><i class="fa-solid fa-arrow-left"></i> Go Back To Dashboard</a>
+					</div>
+				</div>		
+			</div>		
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+
