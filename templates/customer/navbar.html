@@ -41,8 +41,8 @@
       <a href="#" data-bs-toggle="modal" data-bs-target="#suspendedModal"><i class="fa fa-unlock-alt me-2"></i>Change Password</a>
       <a href="{% url 'account:logout' %}" class="logout_btn fw-bold">Logout <i class="fa-solid fa-arrow-right-from-bracket ms-3"></i></a>
     {% else %}
-      <a href="" class="active"><i class="fa-solid fa-house me-2"></i>Dashboard</a>
-      <a href=""><i class="fa-regular fa-file me-2"></i>E-Statement</a>
+      <a href="{% url 'customer:dashboard' %}" class="active"><i class="fa-solid fa-house me-2"></i>Dashboard</a>
+      <a href="{% url 'customer:account_statement' %}"><i class="fa-regular fa-file me-2"></i>E-Statement</a>
       <a href=""><i class="fa-solid fa-wallet me-2"></i>Balance Inquiry</a>
       
       <a href="#" data-bs-toggle="modal" data-bs-target="#transaferType"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a>
