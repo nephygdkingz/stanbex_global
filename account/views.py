@@ -81,6 +81,7 @@ def verifyOtp(request):
 
     # Handle first-time send on GET
     if request.method == "GET" and not request.session.get('otp_sent', False):
+        print("Sending OTP for the first time for user ID:", pk)
         result = handle_resend(request, user)
         if isinstance(result, HttpResponseRedirect):
             return result  # cooldown, max reached, or sent
@@ -104,7 +105,7 @@ def verifyOtp(request):
 
         # Case 4: Wrong code but still attempts left
         user.otp.increment_attempts()
-        remaining = user.otp.MAX_ATTEMPTS - user.otp.attempts
+        # remaining = user.otp.MAX_ATTEMPTS - user.otp.attempts
         messages.error(request, f"Incorrect OTP. please check the code and try again")
         return redirect('account:verify_otp')
 
@@ -114,14 +115,13 @@ def verifyOtp(request):
     })
 
 
-@require_POST
 def resendOtp(request):
     pk = request.session.get('pk')
     if not pk:
         messages.error(request, "Session expired. Please log in again.")
         return redirect('account:login')
-
     user = get_object_or_404(MyUser, id=pk)
+    messages.success(request, "OTP resent to your email.")
     return handle_resend(request, user)
 
 

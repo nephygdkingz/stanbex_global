@@ -4,16 +4,20 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
-# from .email_service import email_send
+
+from notification.email_utils import send_email_threaded
 
 def send_otp_email(user):
-    """Send OTP email to the user."""
     try:
-        message = render_to_string('emails/login_otp_email.html', {
-            'name': f'{user.first_name} {user.last_name}',
-            'code': user.otp.number
-        })
-        # email_send('Account Login OTP Code', message, user.email)
+        send_email_threaded(
+            subject='Account Login OTP Code',
+            to_email=user.email,
+            context={
+                'name': user.get_full_name(),
+                'code': user.otp.number
+            },
+            html_template='emails/login_otp_email.html'
+        )
     except Exception as e:
         print(f"Failed to send OTP email: {e}")
 
