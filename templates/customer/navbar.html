@@ -3,9 +3,9 @@
     <div class="container-fluid">
       <div class="d-flex align-items-center">
           <a class="navbar-brand" href="#">STANBEX</a>
-          <div>Global Bank</div>
+          <div class="d-none d-md-block">Global Bank</div>
           <!-- <i class="fa-solid fa-bars ms-5 my_menu_bar"></i> -->
-          <!-- <div id="google_translate_element" class="ms-md-5 ms-1"></div> -->
+          <div id="google_translate_element" class="ms-md-5 ms-1"></div>
       </div>
       
       <div class="d-flex align-items-center me-md-5 ">
@@ -13,11 +13,11 @@
           src="{{request.user.profile.picture.url}}"
           alt="Profile"
           class="profile-image me-2 d-none d-md-block"
-        />
+        /> -->
         <span></span>
         <i class="fa-solid fa-bars my_menu_bar d-md-none " id="menu_bar"></i>
-        <i class="fa-solid fa-xmark my_menu_bar d-none d-md-none" id="menu_bar_close"></i> -->
-        <div id="google_translate_element" class="ms-md-5 ms-1"></div>
+        <i class="fa-solid fa-xmark my_menu_bar d-none d-md-none" id="menu_bar_close"></i>
+        <!-- <div id="google_translate_element" class="ms-md-5 ms-1"></div> -->
       </div>
     </div>
 </nav>
@@ -43,7 +43,7 @@
     {% else %}
       <a href="{% url 'customer:dashboard' %}" class="active"><i class="fa-solid fa-house me-2"></i>Dashboard</a>
       <a href="{% url 'customer:account_statement' %}"><i class="fa-regular fa-file me-2"></i>E-Statement</a>
-      <a href=""><i class="fa-solid fa-wallet me-2"></i>Balance Inquiry</a>
+      <a href="{% url 'customer:dashboard' %}"><i class="fa-solid fa-wallet me-2"></i>Balance Inquiry</a>
       
       <a href="#" data-bs-toggle="modal" data-bs-target="#transaferType"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a>
       

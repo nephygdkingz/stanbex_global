@@ -38,12 +38,14 @@
 						<td>{{transaction.beneficiary_account}}</td>
 						<!-- <td>{{transaction.beneficiary_bank}}</td> -->
 						<td class="{% if transaction.transaction_type == 'CR' %} text-success {% else %} text-danger {% endif %}"><strong>{% if transaction.transaction_type == 'DR' %}-{% endif %}{{request.user.account.currency}}{{transaction.amount|intcomma}}</strong></td>			      
-						<td class="{% if transaction.status == 'Successful' %} text-success {% elif transaction.status == 'Pending'  %} text-warning {% else %} text-danger {% endif %}">
+						<td>
 							<strong>
 								{% if transaction.status == 'Successful' %}
-									Posted
-								{% else %}
-									{{transaction.status}}
+									<span class="badge bg-success text-white">Successful</span>
+								{% elif transaction.status == 'Pending' %}
+									<span class="badge bg-warning text-white">Pending</span>
+								{% elif transaction.status == 'Failed' %}
+									<span class="badge bg-danger text-white">Failed</span>
 								{% endif %}
 							</strong>
 						</td>				     
