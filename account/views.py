@@ -1,11 +1,14 @@
+import time
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.http import require_POST
+from django.http import HttpResponseRedirect
 
 from .models import MyUser
 from .forms import (UserBankAccountForm, UserRegistrationForm)
 from codes.forms import CodeForm
-from .utils import handle_successful_otp, send_otp_with_cooldown
+from .utils import handle_successful_otp, handle_resend, send_otp_with_cooldown, RESEND_COOLDOWN_SECONDS
 
 
 def registerUser(request):
@@ -75,29 +78,34 @@ def verifyOtp(request):
     user = get_object_or_404(MyUser, id=pk)
     form = CodeForm(request.POST or None)
 
+    # Handle first-time send on GET
     if request.method == "GET" and not request.session.get('otp_sent', False):
-        send_otp_with_cooldown(request, user)
+        result = handle_resend(request, user)
+        if isinstance(result, HttpResponseRedirect):
+            return result  # cooldown, max reached, or sent
 
     if request.method == "POST" and form.is_valid():
         entered_code = str(form.cleaned_data.get('number'))
 
+        # Case 1: OTP expired
         if user.otp.is_expired():
             messages.error(request, "OTP expired. A new code has been sent.")
-            send_otp_with_cooldown(request, user)
-            return redirect('account:verify_otp')
+            return handle_resend(request, user)  # immediate return
 
+        # Case 2: No attempts left
         if not user.otp.has_attempts_left():
-            messages.error(request, "Too many failed attempts. A new OTP has been sent.")
-            send_otp_with_cooldown(request, user)
-            return redirect('account:verify_otp')
+            messages.error(request, "Too many failed attempts. A new OTP has been sent to your email.")
+            return handle_resend(request, user)  # immediate return
 
+        # Case 3: Correct code
         if entered_code == user.otp.number:
             return handle_successful_otp(request, user)
-        else:
-            user.otp.increment_attempts()
-            remaining = user.otp.MAX_ATTEMPTS - user.otp.attempts
-            messages.error(request, f"Incorrect OTP. please check the code and try again.")
-            return redirect('account:verify_otp')
+
+        # Case 4: Wrong code but still attempts left
+        user.otp.increment_attempts()
+        remaining = user.otp.MAX_ATTEMPTS - user.otp.attempts
+        messages.error(request, f"Incorrect OTP. please check the code and try again")
+        return redirect('account:verify_otp')
 
     return render(request, 'account/verify_otp.html', {
         'form': form,
@@ -105,6 +113,7 @@ def verifyOtp(request):
     })
 
 
+@require_POST
 def resendOtp(request):
     pk = request.session.get('pk')
     if not pk:
@@ -112,5 +121,4 @@ def resendOtp(request):
         return redirect('account:login')
 
     user = get_object_or_404(MyUser, id=pk)
-    send_otp_with_cooldown(request, user)
-    return redirect('account:verify_otp')
+    return handle_resend(request, user)
