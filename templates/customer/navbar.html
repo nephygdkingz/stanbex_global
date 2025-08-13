@@ -45,7 +45,8 @@
       <a href="{% url 'customer:account_statement' %}"><i class="fa-regular fa-file me-2"></i>E-Statement</a>
       <a href="{% url 'customer:dashboard' %}"><i class="fa-solid fa-wallet me-2"></i>Balance Inquiry</a>
       
-      <a href="#" data-bs-toggle="modal" data-bs-target="#transaferType"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a>
+      <a href="{% url 'customer:local_transfer' %}"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a>
+      <!-- <a href="{% url 'customer:local_transfer' %}" data-bs-toggle="modal" data-bs-target="#transaferType"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a> -->
       
       <a href=""><i class="fa fa-sign-language me-2"></i>Apply for Loans</a>
       <a href=""><i class="fa fa-phone me-2"></i>Get Help</a>

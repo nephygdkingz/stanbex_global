@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>DTFB</title>
+</head>
+<body>
+		<h2>Dear {{ name }},</h2>
+	
+	
+		<p>This is a summary of a Debit(DR) transaction that just occured in your account with us.
+		</p>
+		<div style="display: flex; justify-content: center; padding-top:10px ;">
+			<div class="all">
+			    <table style="font-family: Arial, Helvetica, sans-serif;
+				 border-collapse: collapse;
+				 width: 400px;">
+					   <tr style="background-color: #aecbec; color: #000;">
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px; background-color: #06438a; color: #fff;"><strong>Date/time:</strong></td>
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;">{{date}}</td>
+					   </tr>
+					   <tr style="background-color: #aecbec; color: #000;">
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;  background-color: #06438a; color: #fff;"><strong>Account Number:</strong></td>
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;">**** ***{{account_number|slice:"5:11"}}</td>
+					   </tr>
+					   <tr style="background-color: #aecbec; color: #000;">
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;  background-color: #06438a; color: #fff;"><strong>Description:</strong></td>
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;">{{summery}}</td>
+					   </tr>
+					   <tr style="background-color: #aecbec; color: #000;">
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;  background-color: #06438a; color: #fff;"><strong>Amount:</strong></td>
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;">{{amount}}</td>
+					   </tr>
+					   <tr style="background-color: #aecbec; color: #000;">
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;  background-color: #06438a; color: #fff;"><strong>Transaction Type:</strong></td>
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;">Debit (DR)</td>
+					   </tr>
+					   
+					   <tr style="background-color: #aecbec; color: #000;">
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;  background-color: #06438a; color: #fff;"><strong>Current Balance:</strong></td>
+					     <td style="border: 1px solid #ddd;
+					     padding: 8px;"><strong>{{balance}}</strong></td>
+					   </tr>
+					   
+			 	</table>
+
+			</div>
+
+		</div>
+	
+			    	   
+	    <h5>Yours in Service,<br>
+			Mr. Michael J. Brown<br>
+			Foreign Operation Manager(PMFB)<br>
+			Address:9537 FM 1907, Eagle Pass,Texas, 78852<br>
+			Email: contact@dewtrustonlinefb.com</h5>
+				    <br>
+				    <br>	    
+	    <p><i>-- 
+			*************************WARNING*****************************
+			This message was sent from DTFB. It is designated for intended recipient only. If you have received this email in error, you should immediately discard it without transferring or storing any of it's content. Anyone caught not abiding with these rules will be made to face the law as all communications are officially meant for DTFB customers only. <br>DTFB Copyright ©2021 All rights reserved.</i></p>
+
+</body>
+</html>
