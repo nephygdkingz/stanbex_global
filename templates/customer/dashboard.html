@@ -17,22 +17,16 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="progress-container depo">
-                                    <div
-                                    class="progress-bar deposits"
-                                    id="progress-bar-1"
-                                    ></div>
+                                    <div class="progress-bar deposits" id="progress-bar-1"></div>
                                     <div class="percentage" id="percentage-1">0%</div>
                                     <div class="loan-text">Deposits</div>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="progress-container">
-                                    <div
-                                    class="progress-bar withdraw"
-                                    id="progress-bar-2"
-                                    ></div>
+                                    <div class="progress-bar withdraw" id="progress-bar-2"></div>
                                     <div class="percentage" id="percentage-2">0%</div>
-                                    <div class="loan-text">Withdrawers</div>
+                                    <div class="loan-text">Withdrawals</div>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -48,30 +42,26 @@
 
                 <div class="col-md-6">
                     <div class="card p-3 top-card">
-                    <h6 class="card-title mb-4">
-                        Total Blanace & Ledger Statistics
-                    </h6>
-                    <div class="row">
-                        <div class="col-4">
-                            <p class="text-success mb-1">Balance</p>
-                            <h5 class="balance-ledger">{{request.user.account.currency}}{{request.user.account.balance|intcomma}}</h5>
-                            <p class="text-danger mb-1">Ledger Balance</p>
-                            <h5 class="balance-ledger">{{request.user.account.currency}}{{ledger_balance|intcomma}}</h5>
-                        </div>
-                        <div class="col-8">
-                            <div class="chart-placeholder mt-2" style="height: 120px">
-                                <img src="{% static 'images/linechart-one.jpg' %}" alt="chart" class="img-fluid" style="height: 100%; width: 100%; object-fit: cover;">
+                        <h6 class="card-title mb-4">Total Balance & Ledger Statistics</h6>
+                        <div class="row">
+                            <div class="col-4">
+                                <p class="text-success mb-1">Balance</p>
+                                <h5 class="balance-ledger">{{ request.user.account.currency }}{{ request.user.account.balance|intcomma }}</h5>
+                                <p class="text-danger mb-1">Ledger Balance</p>
+                                <h5 class="balance-ledger">{{ request.user.account.currency }}{{ ledger_balance|intcomma }}</h5>
+                            </div>
+                            <div class="col-8">
+                                <div class="chart-placeholder mt-2" style="height: 120px">
+                                    <img src="{% static 'customer/images/linechart-one.jpg' %}" alt="chart" class="img-fluid" style="height: 100%; width: 100%; object-fit: cover;">
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- marqueewidget start -->
         {% include './included/marquee_widgetme.html' %}
-        <!-- marqueewidget end -->
 
         <div class="row mt-4">
             <div class="col-md-8 mb-4 mb-md-0">
@@ -86,15 +76,15 @@
                 <div class="card wavy-card">
                     <div class="main-wavy px-3 pt-2 pb-2">
                         <h6 class="card-title small">Available Balance:</h6>
-                        <p class="text-light small">Updated: {{request.user.last_login}}</p>
-                        <h5>{{request.user.account.currency}}{{request.user.account.balance|intcomma}}</h5>
+                        <p class="text-light small">Updated: {{ request.user.last_login }}</p>
+                        <h5>{{ request.user.account.currency }}{{ request.user.account.balance|intcomma }}</h5>
                     </div>
                     
                     <div class="chart-placeholder2">
                         <svg viewBox="0 0 500 200">
                             <path d="M 0 50 C 150 150 300 0 500 80 L 500 0 L 0 0" fill="#2307be"></path>
                             <path d="M 0 50 C 150 150 330 -30 500 50 L 500 0 L 0 0" fill="#2307be" opacity="0.8"></path>
-                           <path d="M 0 50 C 215 150 250 0 500 100 L 500 0 L 0 0" fill="#000" opacity="0.1"></path>
+                            <path d="M 0 50 C 215 150 250 0 500 100 L 500 0 L 0 0" fill="#000" opacity="0.1"></path>
                         </svg>
                         <div class="barchartme">
                             <div class="chartme-container">
@@ -105,130 +95,85 @@
                 </div>
             </div>
         </div>
-        </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Define an array of colors for each progress bar
+document.addEventListener("DOMContentLoaded", function() {
+    // Progress bar colors
     const colors = ['#02a802', '#fcd600', '#2307be'];
-    document.addEventListener("DOMContentLoaded", function() {
-        // For each loan, update the progress bar and color
-        updateProgressBar({{ gross_credit_percent }}, 1, colors[0]);
-        updateProgressBar({{ gross_debit_percent }}, 2, colors[1]);
-        updateProgressBar({{ debit_percent }}, 3, colors[2]);
-    });
 
-    // Function to update progress bar with color
+    // Update progress bars
+    updateProgressBar({{ gross_credit_percent|default:0 }}, 1, colors[0]);
+    updateProgressBar({{ gross_debit_percent|default:0 }}, 2, colors[1]);
+    updateProgressBar({{ debit_percent|default:0 }}, 3, colors[2]);
+
     function updateProgressBar(percentage, id, color) {
         const progressBar = document.getElementById(`progress-bar-${id}`);
         const percentageDisplay = document.getElementById(`percentage-${id}`);
-
-        // Set the progress bar color dynamically
         progressBar.style.background = `conic-gradient(${color} ${percentage}% 0%, #dcdcdc ${percentage}% 100%)`;
         percentageDisplay.textContent = `${percentage}%`;
     }
-</script>
 
-<!-- chart -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-$(document).ready(function(){
-	const ctx = document.getElementById('myChart');
-
-	  new Chart(ctx, {
-	    type: 'bar',
-	    
-	    data: {
-	      labels: [{% for i in month %} '{{i}}', {% endfor %}],
-	      datasets: [{
-	        label: '#Transaction Chart',
-	        data: [{% for i in sum %} {{i}}, {% endfor %}],
-	        backgroundColor: [
-	        	'rgba(255, 99, 132, 1)',
-	        	'rgba(54, 162, 235, 1)',
-	        	'rgba(255, 206, 86, 1)',
-	        	'rgba(75, 192, 192, 1)',
-	        	'rgba(153, 102, 255, 1)',
-	        	'rgba(255, 159, 64, 1)',
-	        	'rgba(51, 0, 51, 1)',
-	        	'rgba(128, 255, 0, 1)',
-	        	'rgba(51, 51, 255, 1)',
-	        	'rgba(204, 204, 0, 1)',
-	        	'rgba(51, 0, 25, 1)',
-	        	'rgba(153, 255, 255, 1)',
-	        ],
-	        borderColor: [
-	        	'rgba(255, 99, 132, 1)',
-	        	'rgba(54, 162, 235, 1)',
-	        	'rgba(255, 206, 86, 1)',
-	        	'rgba(75, 192, 192, 1)',
-	        	'rgba(153, 102, 255, 1)',
-	        	'rgba(255, 159, 64, 1)',
-	        	'rgba(51, 0, 51, 1)',
-	        	'rgba(128, 255, 0, 1)',
-	        	'rgba(51, 51, 255, 1)',
-	        	'rgba(204, 204, 0, 1)',
-	        	'rgba(51, 0, 25, 1)',
-	        	'rgba(153, 255, 255, 1)',
-	        ],
-
-	        borderWidth: 1
-	      }]
-	    },
-	    options: {
-	      scales: {
-	        y: {
-	          beginAtZero: true
-	        }
-	      }
-	    }
-	  });
-});
-	
-
-</script>
-
-<script>
-    // Data for the bar chart
-    const ctx2 = document.getElementById('myBarChart').getContext('2d');
-    const myBarChart = new Chart(ctx2, {
-        type: 'bar', // Specify the type of chart
+    // First chart - Transaction Chart
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'bar',
         data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'], // X-axis labels
+            labels: [{% for i in month %}'{{ i }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
             datasets: [{
-                label: 'withdrawer',
-                data: [12, 19, 3, 5, 2, 3], // Y-axis data
+                label: '#Transaction Chart',
+                data: [{% for i in sum %}{{ i|default:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)', // Red
-                    'rgba(54, 162, 235, 0.2)', // Blue
-                    'rgba(255, 206, 86, 0.2)', // Yellow
-                    'rgba(75, 192, 192, 0.2)', // Green
-                    'rgba(153, 102, 255, 0.2)', // Purple
-                    'rgba(255, 159, 64, 0.2)' // Orange
+                    'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
+                    'rgba(51, 0, 51, 1)', 'rgba(128, 255, 0, 1)', 'rgba(51, 51, 255, 1)',
+                    'rgba(204, 204, 0, 1)', 'rgba(51, 0, 25, 1)', 'rgba(153, 255, 255, 1)'
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)', // Red
-                    'rgba(54, 162, 235, 1)', // Blue
-                    'rgba(255, 206, 86, 1)', // Yellow
-                    'rgba(75, 192, 192, 1)', // Green
-                    'rgba(153, 102, 255, 1)', // Purple
-                    'rgba(255, 159, 64, 1)' // Orange
+                    'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
+                    'rgba(51, 0, 51, 1)', 'rgba(128, 255, 0, 1)', 'rgba(51, 51, 255, 1)',
+                    'rgba(204, 204, 0, 1)', 'rgba(51, 0, 25, 1)', 'rgba(153, 255, 255, 1)'
                 ],
-                borderWidth: 1 // Border width for bars
+                borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true // Start Y-axis at zero
-                }
-            },
-            responsive: true,
-            maintainAspectRatio: false // Responsive without maintaining aspect ratio
+            scales: { y: { beginAtZero: true } }
         }
     });
+
+    // Second chart - Withdrawals
+    const ctx2 = document.getElementById('myBarChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
+            datasets: [{
+                label: [{% for label in withdrawals_labels %}'{{ label }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                data: [{% for value in withdrawals_data %}{{ value|default:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+});
 </script>
+
 {% endblock %}
