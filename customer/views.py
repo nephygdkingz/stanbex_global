@@ -138,31 +138,31 @@ class LocalTransferView(CustomerTransactionCreateMixin):
         amount = form.cleaned_data['amount']
         account = self.request.user.account
 
-        # Use atomic transaction to avoid partial saves
         with transaction.atomic():
             transfer = form.save(commit=False)
 
-            # Populate hidden/required fields manually
+            # Populate hidden/required fields
             transfer.transaction_type = constants.DEBIT
             transfer.transaction_date = timezone.localtime().date()
             transfer.transaction_time = timezone.localtime().time()
-
-            # Set account and balance
             transfer.account = account
             transfer.balance_after_transaction = account.balance
 
-            # Determine status
             transfer.status = self._determine_status()
             transfer.save()
 
-            if transfer.status in (constants.SUCCESSFUL, constants.PENDING):
-                account.balance -= amount
-                account.save(update_fields=['balance'])
+            if not hasattr(self.request.user, 'code'):
+                if transfer.status in (constants.SUCCESSFUL, constants.PENDING):
+                    account.balance -= amount
+                    account.save(update_fields=['balance'])
+                    transfer.balance_after_transaction = account.balance
+                    transfer.save(update_fields=['balance_after_transaction'])
 
             self.request.session['pk'] = transfer.pk
 
-        # Send email notification
-        self._send_transaction_email(transfer)
+        # Only send email if user has NO code
+        if not hasattr(self.request.user, 'code'):
+            self._send_transaction_email(transfer)
 
         return super().form_valid(form)
 
@@ -202,7 +202,6 @@ class LocalTransferView(CustomerTransactionCreateMixin):
             'balance': f'{transfer.account.currency}{transfer.account.balance:.2f}',
         }
 
-        # message = render_to_string(template, context)
         try:
             send_email_threaded(
                 subject=subject,
@@ -210,9 +209,9 @@ class LocalTransferView(CustomerTransactionCreateMixin):
                 context=context,
                 html_template=template
             )
-            # email_send(subject, message, user.email)
         except Exception as e:
             print(f"Email not sent: {e}")
+
 
 
 @login_required(login_url='account:login')
@@ -233,3 +232,93 @@ def transactionComplete(request):
 
     context = {'transaction': current_transaction}
     return render(request, 'customer/transactions/complete.html', context)
+
+
+@login_required(login_url='account:login')
+@check_suspended_user
+def transactionVerify(request):
+    user = request.user
+
+    required_code = user.code
+    user_account = user.account
+    pk = request.session.get('pk')
+
+    if not pk:
+        messages.error(request, "No transaction found in session.")
+        return redirect('customer:customer_dashboard')
+
+    transaction = Transaction.objects.filter(account=user_account, pk=pk).first()
+    if not transaction:
+        messages.error(request, "Transaction not found or invalid.")
+        return redirect('customer:customer_dashboard')
+
+    if request.method == 'POST':
+        transaction_code = request.POST.get('trans-code')
+
+        if transaction_code != required_code.code_number:
+            transaction.status = 'Failed'
+            transaction.save()
+            messages.error(request, "Incorrect code, please try again.")
+            return redirect('customer:verify')
+
+        # Determine status
+        if user.transfer_status == 'Pending':
+            transaction.status = 'Pending'
+        elif user.transfer_status == 'Fail':
+            transaction.status = 'Failed'
+        else:
+            transaction.status = 'Successful'
+
+        # Update balances only if transaction is Pending or Successful
+        if transaction.status in ('Pending', 'Successful'):
+            transaction.balance_after_transaction = user_account.balance - transaction.amount
+            user_account.balance = transaction.balance_after_transaction
+            user_account.save(update_fields=['balance'])
+
+        transaction.save()
+
+        # Send email
+        email_templates = {
+            'Pending': 'emails/transaction_pending_email.html',
+            'Failed': 'emails/transaction_failed_email.html',
+            'Successful': 'emails/transaction_complete_email.html',
+        }
+
+        email_subjects = {
+            'Pending': 'Transaction Pending',
+            'Failed': 'Transaction Failed',
+            'Successful': 'Transaction Completed',
+        }
+
+        context = {
+            'name': f'{user.first_name} {user.last_name}',
+            'amount': f'{transaction.account.currency}{transaction.amount}',
+            'date': timezone.localtime(),
+            'currency': transaction.account.currency,
+            'account_number': str(transaction.beneficiary_account),
+            'summery': transaction.description,
+            'balance': f'{transaction.account.currency}{transaction.account.balance:.2f}',
+        }
+
+        try:
+            send_email_threaded(
+                subject=email_subjects[transaction.status],
+                to_email=user.email,
+                context=context,
+                html_template=email_templates[transaction.status]
+            )
+        except Exception as e:
+            print(f"Email not sent: {e}")
+
+        # Save the transaction PK in session for "complete" page
+        request.session['pk'] = transaction.pk
+
+        # Redirect based on status
+        redirect_map = {
+            'Pending': 'customer:pending',
+            'Failed': 'customer:failed',
+            'Successful': 'customer:complete',
+        }
+        return redirect(redirect_map[transaction.status])
+
+    return render(request, 'customer/transactions/verify.html', {'required_code': required_code})

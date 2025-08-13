@@ -1,0 +1,50 @@
+{% extends '../base.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+	.btn-primary{
+        background-color: #020361;
+        border-color: #020361;
+    }
+	.btn-primary:hover{
+        background-color: #04067c;
+        border-color: #030592;
+    }
+</style>
+<div class="other_content">
+	<div class="container py-5">
+		<div class="row align-item-cnter justify-content-center">
+			<div class="col-md-5">
+				<div class="card bg-light text-dark shadow-lg">
+					<h5 class="text-center text-dark mt-3 mx-3">Verify {{required_code}} Code</h5>
+					<hr>
+					{% include '../../alerts/messages_alert.html' %}
+					<center>
+						<p class="fw-bold px-4 text-dark">Please enter your <strong class="text-info">{{required_code}}</strong> code to continue.You can contact support if you don't have your {{required_code}} code.</p>
+						<div class="spinner-grow text-secondary mb-3" role="status">
+						<span class="visually-hidden">Loading...</span>
+						</div>
+					</center>
+					<div class="card-body">
+						<form method="POST" class="js-submit-spinner">
+						{% csrf_token %}						
+							<div class="mb-3">
+							<!-- <label for="otp-code" class="form-label fw-bold">Enter {{required_code}} Code Here </label> -->
+							<input type="text" name="trans-code" class="form-control" id="otp-code" placeholder="Enter {{required_code}} Code Here" required>
+							</div>
+
+							<div class="mt-3">
+                                <button type="submit" class="btn btn-primary w-100 fw-bold btn-sm">
+                                    <span class="btn-text">Confirm Code</span>
+                                </button>
+                            </div>	
+						</form>
+					</div>
+				</div>		
+			</div>		
+		</div>
+	</div>
+</div>
+{% endblock %}

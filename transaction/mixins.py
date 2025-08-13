@@ -15,7 +15,7 @@ class CustomerTransactionCreateMixin(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         if hasattr(self.request.user, 'code'):
-            return reverse_lazy('transaction:verify')
+            return reverse_lazy('customer:verify')
 
         status_url_map = {
             'Pending': 'transaction:pending',
