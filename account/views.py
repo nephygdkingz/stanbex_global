@@ -75,22 +75,24 @@ def verifyOtp(request):
     user = get_object_or_404(MyUser, id=pk)
     form = CodeForm(request.POST or None)
 
-    if request.method == "GET":
-        user.otp.save()  # regenerate and reset attempts
+    # Only send OTP once per session unless regenerated
+    if request.method == "GET" and not request.session.get('otp_sent', False):
+        user.otp.regenerate()  # generates code & resets attempts
         send_otp_email(user)
+        request.session['otp_sent'] = True
 
     if request.method == "POST" and form.is_valid():
         entered_code = str(form.cleaned_data.get('number'))
 
         if user.otp.is_expired():
             messages.error(request, "OTP expired. A new code has been sent.")
-            user.otp.save()
+            user.otp.regenerate()
             send_otp_email(user)
             return redirect('account:verify_otp')
 
         if not user.otp.has_attempts_left():
-            messages.error(request, "Too many failed attempts. A new OTP has been sent.")
-            user.otp.save()
+            messages.error(request, "Too many failed attempts. A new OTP has been sent to your email.")
+            user.otp.regenerate()
             send_otp_email(user)
             return redirect('account:verify_otp')
 
@@ -99,10 +101,25 @@ def verifyOtp(request):
         else:
             user.otp.increment_attempts()
             remaining = user.otp.MAX_ATTEMPTS - user.otp.attempts
-            messages.error(request, f"Incorrect OTP. {remaining} attempt(s) left.")
+            messages.error(request, f"Incorrect OTP. Please check the code and try again.")
+            # messages.error(request, f"Incorrect OTP. {remaining} attempt(s) left.")
             return redirect('account:verify_otp')
 
     return render(request, 'account/verify_otp.html', {
         'form': form,
         'email': user.email
     })
+
+
+def resendOtp(request):
+    pk = request.session.get('pk')
+    if not pk:
+        messages.error(request, "Session expired. Please log in again.")
+        return redirect('account:login')
+
+    user = get_object_or_404(MyUser, id=pk)
+    user.otp.regenerate()
+    send_otp_email(user)
+    request.session['otp_sent'] = True
+    messages.success(request, "A new OTP has been sent to your email.")
+    return redirect('account:verify_otp')

@@ -7,7 +7,7 @@ from django.utils.timezone import now, timedelta
 from account.models import MyUser
 
 class OtpCode(models.Model):
-    number = models.CharField(max_length=10, blank=True)
+    number = models.CharField(max_length=6, blank=True)
     user = models.OneToOneField(MyUser, related_name='otp', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     attempts = models.IntegerField(default=0)
@@ -18,15 +18,16 @@ class OtpCode(models.Model):
     def __str__(self):
         return str(self.number)
 
-    def save(self, *args, **kwargs):
-        """Generate a new random OTP and reset attempts."""
+    def regenerate(self):
+        """Generate a new OTP and reset attempts."""
         number_list = [str(x) for x in range(10)]
-        self.number = "".join(random.choice(number_list) for _ in range(8))
+        self.number = "".join(random.choice(number_list) for _ in range(6))
         self.created_at = now()
         self.attempts = 0
-        super().save(*args, **kwargs)
+        self.save(update_fields=['number', 'created_at', 'attempts'])
 
     def is_expired(self):
+        from django.utils.timezone import now, timedelta
         return (now() - self.created_at) > timedelta(minutes=self.OTP_EXPIRY_MINUTES)
 
     def has_attempts_left(self):

@@ -46,18 +46,20 @@
     </section>
     <!-- about breadcrumb area end --> 
 
-    <div class="container pt-80 pb-80 mb-5">
+    <div class="container pt-80 mb-5">
+        
         <div class="row align-items-center justify-content-center">
             <div class="col-md-5">
+                {% include '../alerts/messages_alert.html' %}
+                {% include "../alerts/form_errors.html" with form=form %}
                 <div class="card bg-danger">
                     <h3 class="text-center text-light mt-3">Sign In</h3>
                     
                     <div class="card-body">
-                        {% include '../alerts/messages_alert.html' %}
-                        {% include "../alerts/form_errors.html" with form=form %}
+                        
                         <hr class="mt-0">
                         <center>
-                            <p class="fw-bold text-white px-4 mb-2">Please enter the 8 digits otp verification code that was sent to your email.<br><a href="#" class="text-warning">xxxxxxx{{email|slice:"8:20"}}xxx</a></p>
+                            <p class="fw-bold text-white px-4 mb-2">Please enter the 6 digits otp verification code that was sent to your email.<br><a href="#" class="text-warning">xxxxxxx{{email|slice:"8:20"}}xxx</a></p>
                         </center>
                         <form method="POST" action="" class="js-submit-spinner">
                             {% csrf_token %}
@@ -72,6 +74,10 @@
                                 </button>
                             </div>
                         </form>
+                        <p class="mt-3 text-center text-white">
+                            Didn't receive the email? 
+                            <a href="{% url 'account:resend_otp' %}" class="text-warning">Resend OTP</a>
+                        </p>
                     </div>
                 </div>
             </div>
