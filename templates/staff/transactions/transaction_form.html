@@ -1,0 +1,92 @@
+{% extends '../../customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+	<div class="container py-5">
+		<div class="row align-item-center justify-content-center ">
+			<div class="col-md-5">
+				<div class="card">
+					<h5 class="text-center text-white bg-primary py-3 mt-2">{{title}}</h5>
+					{% include '../../alerts/messages_alert.html' %}
+                    {% include "../../alerts/form_errors.html" with form=form %}
+					<div class="card-body">
+						<form method="POST" class="js-submit-spinner"> 
+							{% csrf_token %}
+							{{ form.non_field_errors }}
+							<div class="mb-3">
+							  {{ form.account.errors }}
+							  <label for="{{ form.account.id_for_label }}" class="form-label fw-bold">Select Customer:</label>
+							  {{ form.account }}
+							</div>
+
+							<div class="mb-3">
+							  {{ form.beneficiary_name.errors }}
+							  <label for="{{ form.beneficiary_name.id_for_label }}" class="form-label fw-bold">
+                                {% if title == 'Fund Customer Account' %}
+                                    Sender 
+                                {% else %}
+                                    Beneficiary
+                                {% endif %}
+                                Name
+                              </label>
+							  {{ form.beneficiary_name }}
+							</div>
+
+							<div class="mb-3">
+							  {{ form.beneficiary_account.errors }}
+							  <label for="{{ form.beneficiary_account.id_for_label }}" class="form-label fw-bold">
+                                {% if title == 'Fund Customer Account' %}
+                                    Sender 
+                                {% else %}
+                                    Beneficiary
+                                {% endif %}
+                                Account
+                              </label>
+							  {{ form.beneficiary_account }}
+							</div>
+
+                            <div class="mb-3">
+                                {{ form.amount.errors }}
+                                <label for="{{ form.amount.id_for_label }}" class="form-label fw-bold">Enter Amount:</label>
+                                {{ form.amount }}
+                            </div>
+
+							
+                            <div class="mb-3">
+                                {{ form.description.errors }}
+                                <label for="{{ form.description.id_for_label }}" class="form-label fw-bold">Description:</label>
+                                {{ form.description }}
+                            </div>
+							<div class="mb-3">
+                                {{ form.status.errors }}
+                                <label for="{{ form.status.id_for_label }}" class="form-label fw-bold">Status:</label>
+                                {{ form.status}}
+							</div>
+
+                            <div class="mb-3">
+                                {{ form.transaction_date.errors }}
+                                <label for="{{ form.transaction_date.id_for_label }}" class="form-label fw-bold">Date:</label>
+                                {{ form.transaction_date}}
+							</div>
+							
+
+							<div class="mb-3">
+							  {{ form.transaction_time.errors }}
+							  <label for="{{ form.transaction_time.id_for_label }}" class="form-label fw-bold">Time:</label>
+							  {{ form.transaction_time }}
+							</div>
+
+							<button type="submit" class="btn btn-primary w-100 fw-bold">
+                                    <span class="btn-text">Deposit</span>
+                            </button>
+							
+						</form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}

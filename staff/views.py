@@ -2,12 +2,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+from django.db import OperationalError
 
 from .decorators import staff_required_redirect
 from transaction.models import Transaction
 from account.models import (MyUser, UserBankAccount, RequiredCode)
 from .forms import UpdateUserAccountForm, UpdateUserBankAccountForm, RequiredCodeForm
 from codes.models import OtpCode
+from . import forms
+from transaction import constants
 
 @login_required(login_url='account:login')
 @staff_required_redirect
@@ -152,3 +158,110 @@ def delete_required_code(request, pk):
 def all_otp(request):
     context = {'all_otp': OtpCode.objects.all()}
     return render(request, 'staff/all_otp.html', context)
+
+
+# transaction
+
+class TransactionCreateMixin(LoginRequiredMixin, CreateView):
+    template_name = 'staff/transactions/transaction_form.html'
+    model = Transaction
+    title = ''
+    success_url = ''
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'title': self.title
+        })
+
+        return context
+    
+
+class DepositMoneyView(TransactionCreateMixin):
+    form_class = forms.DepositForm
+    title = 'Fund Customer Account'
+    success_url = reverse_lazy('staff:deposit_money')
+
+    def get_initial(self):
+        return {
+            'transaction_type': constants.CREDIT,
+        }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.method == 'POST':
+            data = kwargs.get('data').copy()
+            data['transaction_type'] = constants.CREDIT
+            kwargs['data'] = data
+        return kwargs
+
+    def form_valid(self, form):
+        amount = form.cleaned_data['amount']
+        customer_account = form.cleaned_data['account']
+
+        try:
+            account = UserBankAccount.objects.get(account_no=customer_account.account_no)
+        except OperationalError as e:
+            messages.error(self.request, 'There was a database error. Please try again later.')
+            return self.form_invalid(form)
+
+        transaction = form.save(commit=False)
+        transaction.transaction_type = constants.CREDIT  # Ensure it's set
+        transaction.balance_after_transaction = account.balance + amount
+        transaction.save()
+
+        account.balance += amount
+        account.save(update_fields=['balance'])
+
+        messages.success(
+            self.request,
+            f'{account.currency}{amount} has been successfully deposited to this account.'
+        )
+
+        return super().form_valid(form)
+
+
+class WithdrawMoneyView(TransactionCreateMixin):
+    form_class = forms.WithdrawForm
+    title = 'Debit Customer Account'
+    success_url = reverse_lazy('staff:withdraw_money')
+
+    def get_initial(self):
+        return {'transaction_type': constants.DEBIT}
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.method == 'POST':
+            data = kwargs.get('data').copy()
+            data['transaction_type'] = constants.DEBIT
+            kwargs['data'] = data
+        return kwargs
+
+    def form_valid(self, form):
+        amount = form.cleaned_data['amount']
+        customer_account = form.cleaned_data['account']
+
+        try:
+            account = UserBankAccount.objects.get(account_no=customer_account.account_no)
+        except OperationalError:
+            messages.error(self.request, 'Database error occurred. Please try again later.')
+            return self.form_invalid(form)
+
+        if amount > account.balance:
+            form.add_error('amount', 'Insufficient funds in this account.')
+            return self.form_invalid(form)
+
+        transaction = form.save(commit=False)
+        transaction.transaction_type = constants.DEBIT  # Ensure it's set
+        transaction.balance_after_transaction = account.balance - amount
+        transaction.save()
+
+        account.balance -= amount
+        account.save(update_fields=['balance'])
+
+        messages.success(
+            self.request,
+            f'Successfully withdrawn {account.currency}{amount} from this account.'
+        )
+
+        return super().form_valid(form)

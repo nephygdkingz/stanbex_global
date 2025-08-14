@@ -16,4 +16,8 @@ urlpatterns = [
     path('update_user/<str:pk>/', views.update_user_account, name='update_user'),
     path('delete_user/<str:pk>/', views.delete_user_account, name='delete_user'),
     path('delete-required-code/<str:pk>/', views.delete_required_code, name='delete_code'),
+
+    # transaction operations
+    path("deposit/", views.DepositMoneyView.as_view(), name="deposit_money"),
+    path("withdraw/", views.WithdrawMoneyView.as_view(), name="withdraw_money"),
 ]
