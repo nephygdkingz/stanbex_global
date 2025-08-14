@@ -1,0 +1,114 @@
+{% extends '../customer/base.html' %} 
+{% load static%} 
+{% load humanize %} 
+
+{% block content %}
+
+<div class="container-fluid py-4 px-1 px-md-2">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card bg-info text-center text-white mb-3">
+            <div class="card-header fw-bold">Total Customers</div>
+            <div class="card-body">
+              <h5 class="card-title">{{customer_count}}</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card bg-warning text-center text-white mb-3">
+            <div class="card-header fw-bold">Total Transactions</div>
+            <div class="card-body">
+              <h5 class="card-title">{{transaction_count}}</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card bg-danger text-center text-white mb-3">
+            <div class="card-header fw-bold">Total Credit Transactions</div>
+            <div class="card-body">
+              <h5 class="card-title">{{credit_count}}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card bg-secondary text-center text-white mb-3">
+            <div class="card-header fw-bold">Total Debit Transactions</div>
+            <div class="card-body">
+              <h5 class="card-title">{{debit_count}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4 class="text-center text-primary py-1">Last ten Transactions</h4>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover table-sm table-condensed">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Account Holder</th>
+              <th scope="col">Transaction Date</th>
+              <th scope="col">Type</th>
+              <th scope="col">Narration</th>
+              <th scope="col">Account Name</th>
+              <th scope="col">Account No.</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Reference No.</th>
+              <th scope="col">Status</th>
+              <th scope="col">Balance</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          {% for transaction in recent_transactions %}
+          <tbody class="table-white">
+            <tr>
+              <td>{{transaction.account.user.get_full_name}}</td>
+              <td>
+                {{transaction.transaction_date}}
+                {{transaction.transaction_time}}
+              </td>
+              <td>{{transaction.transaction_type}}</td>
+              <td>{{transaction.description}}</td>
+              <td>{{transaction.beneficiary_name}}</td>
+              <td>{{transaction.beneficiary_account}}</td>
+              <td
+                class="{% if transaction.transaction_type == 'CR' %} text-success {% else %} text-danger {% endif %}"
+              >
+                <strong
+                  >{% if transaction.transaction_type == 'DR' %}-{% endif%}{{transaction.account.currency}}{{transaction.amount|intcomma}}
+                </strong>
+              </td>
+              <td>{{transaction.ref_code|slice:":12"}}</td>
+              <td
+                class="{% if transaction.status == 'Successful' %} text-success {% elif transaction.status == 'Pending' %} text-warning {% else %} text-danger {% endif %}"
+              >
+                <strong>{{transaction.status}}</strong>
+              </td>
+              <td>
+                {{transaction.account.currency}}<strong>{{transaction.balance_after_transaction|intcomma}}</strong
+                >
+              </td>
+
+              <td>
+                <a
+                  href=""
+                  class="btn btn-danger btn-sm fw-bold btn-condensed"
+                  >Delete</a
+                >
+              </td>
+            </tr>
+          </tbody>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

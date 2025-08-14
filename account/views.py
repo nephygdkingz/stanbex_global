@@ -48,7 +48,7 @@ def loginUser(request):
         if user is not None:
             if user.is_staff:
                 login(request, user)
-                return redirect('account:admin_dashboard')
+                return redirect('staff:dashboard')
             else:
                 if user.otp_status == 'LOGIN OTP YES':
                     request.session['pk'] = user.pk
