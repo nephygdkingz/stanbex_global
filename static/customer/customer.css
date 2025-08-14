@@ -3,8 +3,8 @@ body {
   font-family: "Arial", sans-serif;
 }
 .navbar {
-  /* background-color: #2307be; */
-  background: linear-gradient(to left, #2307be, #563eda);
+  background: linear-gradient(90deg, #004d6e 0%, #00accc 100%);
+  /* background: linear-gradient(to left, #2307be, #563eda); */
   color: #fff;
 }
 .navbar .navbar-brand {
@@ -46,7 +46,8 @@ body {
 }
 .sidebar a.active,
 .sidebar a:hover {
-  background-color: #2307be;
+  background: linear-gradient(90deg, #004d6e 0%, #00accc 100%);
+  /* background-color: #2307be; */
   color: #fff;
   font-weight: bold;
   padding: 5px 10px;
@@ -95,7 +96,8 @@ body {
   /* padding-top: 30px; */
 }
 .top_content {
-  background: linear-gradient(to left, #563eda, #2307be);
+  background: linear-gradient(90deg, #004d6e 0%, #00accc 100%);
+  /* background: linear-gradient(to left, #563eda, #2307be); */
 }
 .other_content {
   padding-inline: 40px;
@@ -211,7 +213,7 @@ body {
 }
 
 .bg-primary {
-  background-color: #2307be !important;
+  background-color: #004d6e !important;
 }
 
 .btn-info {
