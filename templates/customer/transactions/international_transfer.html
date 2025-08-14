@@ -1,0 +1,121 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+	.btn-primary{
+        background-color: #182978;
+        border-color: #182978;
+    }
+</style>
+<div class="other_content">
+	<div class="container py-5">
+		<div class="row align-item-center justify-content-center">
+			<div class="col-md-7">
+				<div class="card shadow-lg">
+					<h5 class="text-center text-white bg-primary py-1">International Wire Transfer</h5>
+					{% include '../../alerts/messages_alert.html' %}
+                    {% include "../../alerts/form_errors.html" with form=form %}
+					<div class="card-body">
+						<form method="POST" action="." class="js-submit-spinner"> 
+							{% csrf_token %}
+							{{ form.non_field_errors }}
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.beneficiary_bank.errors }}
+                                        <label for="{{ form.beneficiary_bank.id_for_label }}" class="form-label fw-bold">Receiver Bank Name:</label>
+                                        {{ form.beneficiary_bank }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.beneficiary_account.errors }}
+                                        <label for="{{ form.beneficiary_account.id_for_label }}" class="form-label fw-bold">Receiver Account Number:</label>
+                                        {{ form.beneficiary_account }}
+                                      </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.amount.errors }}
+                                        <label for="{{ form.amount.id_for_label }}" class="form-label fw-bold">Amount:</label>
+                                        {{ form.amount }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.beneficiary_name.errors }}
+                                        <label for="{{ form.beneficiary_name.id_for_label }}" class="form-label fw-bold">Receiver's Name:</label>
+                                        {{ form.beneficiary_name }}
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        {{ form.route_code.errors }}
+                                        <label for="{{ form.route_code.id_for_label }}" class="form-label fw-bold">Routine Number:</label>
+                                        {{ form.route_code }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        {{ form.iban_number.errors }}
+                                        <label for="{{ form.iban_number.id_for_label }}" class="form-label fw-bold">Iban/swift Code:</label>
+                                        {{ form.iban_number }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        {{ form.transaction_date.errors }}
+                                        <label for="{{ form.transaction_date.id_for_label }}" class="form-label fw-bold">Date:</label>
+                                        {{ form.transaction_date }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.bank_address.errors }}
+                                        <label for="{{ form.bank_address.id_for_label }}" class="form-label fw-bold">Bank Address:</label>
+                                        {{ form.bank_address }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.beneficiary_address.errors }}
+                                        <label for="{{ form.beneficiary_address.id_for_label }}" class="form-label fw-bold">Receiver Adress:</label>
+                                        {{ form.beneficiary_address }}
+                                    </div>
+                                </div>
+                                
+                            </div>
+							
+							<div class="mb-3">
+							  {{ form.description.errors }}
+							  <label for="{{ form.description.id_for_label }}" class="form-label fw-bold">Description:</label>
+							  {{ form.description }}
+							</div>
+                            <hr>
+                            <p class="text-muted small">Please Note: A wire Fee of $65 is charged automatically on every international wire transfer.</p>
+                            <hr>
+
+							<button type="submit" class="btn btn-primary w-100 fw-bold">
+                                <span class="btn-text">Submit</span>
+                            </button>						
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

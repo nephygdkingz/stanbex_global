@@ -45,8 +45,8 @@
       <a href="{% url 'customer:account_statement' %}"><i class="fa-regular fa-file me-2"></i>E-Statement</a>
       <a href="{% url 'customer:dashboard' %}"><i class="fa-solid fa-wallet me-2"></i>Balance Inquiry</a>
       
-      <a href="{% url 'customer:local_transfer' %}"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a>
-      <!-- <a href="{% url 'customer:local_transfer' %}" data-bs-toggle="modal" data-bs-target="#transaferType"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a> -->
+      <!-- <a href="{% url 'customer:local_transfer' %}"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a> -->
+      <a href="{% url 'customer:local_transfer' %}" data-bs-toggle="modal" data-bs-target="#transaferType"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a>
       
       <a href="{% url 'customer:loan' %}"><i class="fa fa-sign-language me-2"></i>Apply for Loans</a>
       <a href="{% url 'customer:customer_care' %}"><i class="fa fa-phone me-2"></i>Get Help</a>
@@ -87,6 +87,40 @@
       </div> -->
     </div>
   </div>
+</div>
+
+
+<!-- select transaction Modal -->
+<div class="modal fade" id="transaferType" tabindex="-1" aria-labelledby="transaferTypeLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="transaferTypeLabel">Select Transfer Type</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'customer:transafer_type' %}" method="POST" class="js-submit-spinner">
+            {% csrf_token %}
+            <div class="modal-body">
+                <select class="form-select" aria-label="Default select example" name="location">
+                    <option value="local"><a href="#">Domestic Wire Transfer</a></option>
+                    <option value="international"><a href="#">International Wire Transfer</a></option>
+                </select>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary w-100 fw-bold btn-sm">
+                  <span class="btn-text">Continue</span>
+              </button>
+                <!-- <button type="submit" id="select-transfer-btn" class="btn btn-info w-100 fw-bold text-white">
+                    <span id="select-my-transfer-btn-text">Continue</span>
+                    <div class="spinner-border text-light spinner-border-sm d-none" role="status" id="select-transfer-btn-spinner">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button> -->
+                <!-- <button type="submit" class="btn btn-danger w-100 fw-bold">Continue</button> -->
+            </div>
+        </form>
+      </div>
+    </div>
 </div>
 
 

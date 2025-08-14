@@ -12,17 +12,17 @@ def check_suspended_user(view_func):
     return _wrapped_view
 
 
-def check_not_suspended_user(view_func):
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            # If the user is NOT suspended, allow access
-            if getattr(request.user, 'status', None) != 'suspended':
-                return view_func(request, *args, **kwargs)
-            # If suspended, redirect them
-            return redirect('customer:dashboard')
-        return view_func(request, *args, **kwargs)
-    return _wrapped_view
+# def check_not_suspended_user(view_func):
+#     @wraps(view_func)
+#     def _wrapped_view(request, *args, **kwargs):
+#         if request.user.is_authenticated:
+#             # If the user is NOT suspended, allow access
+#             if getattr(request.user, 'status', None) != 'suspended':
+#                 return view_func(request, *args, **kwargs)
+#             # If suspended, redirect them
+#             return redirect('customer:dashboard')
+#         return view_func(request, *args, **kwargs)
+#     return _wrapped_view
 
 
 # def check_user_suspension(require_suspended=True):

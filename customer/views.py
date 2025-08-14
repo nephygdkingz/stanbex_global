@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from django.db import transaction
 
 from . import forms
-from .decorators import check_suspended_user, check_not_suspended_user
+from .decorators import check_suspended_user
 from .utils import get_client_ip
 from transaction.models import Transaction
 from transaction.mixins import CustomerTransactionCreateMixin
@@ -281,9 +281,113 @@ def customer_care(request):
 
 
 # transactions
+@login_required(login_url='base:home')
+def select_transafer_type(request):
+    if request.method == 'POST':
+        selected_location = request.POST.get('location')
+
+        if selected_location == 'local':
+            return redirect('customer:local_transfer')
+        elif selected_location == 'international':
+            return redirect('customer:intern_transfer')
+
+        return redirect('account:customer_dashboard')
+
+
 class LocalTransferView(CustomerTransactionCreateMixin):
     form_class = forms.CustomerTransactionForm
     template_name = 'customer/transactions/local_transfer.html'
+
+    def get_initial(self):
+        now = timezone.localtime()
+        return {
+            'transaction_type': constants.DEBIT,
+            'transaction_date': now.date(),
+            'transaction_time': now.time(),
+        }
+
+    def form_valid(self, form):
+        amount = form.cleaned_data['amount']
+        account = self.request.user.account
+
+        with transaction.atomic():
+            transfer = form.save(commit=False)
+
+            # Populate hidden/required fields
+            transfer.transaction_type = constants.DEBIT
+            transfer.transaction_date = timezone.localtime().date()
+            transfer.transaction_time = timezone.localtime().time()
+            transfer.account = account
+            transfer.balance_after_transaction = account.balance
+
+            transfer.status = self._determine_status()
+            transfer.save()
+
+            if not hasattr(self.request.user, 'code'):
+                if transfer.status in (constants.SUCCESSFUL, constants.PENDING):
+                    account.balance -= amount
+                    account.save(update_fields=['balance'])
+                    transfer.balance_after_transaction = account.balance
+                    transfer.save(update_fields=['balance_after_transaction'])
+
+            self.request.session['pk'] = transfer.pk
+
+        # Only send email if user has NO code
+        if not hasattr(self.request.user, 'code'):
+            self._send_transaction_email(transfer)
+
+        return super().form_valid(form)
+
+    def _determine_status(self):
+        status_map = {
+            'Pending': constants.PENDING,
+            'Fail': constants.FAILED,
+        }
+        return status_map.get(self.request.user.transfer_status, constants.SUCCESSFUL)
+
+    def _send_transaction_email(self, transfer):
+        user = self.request.user
+        templates = {
+            constants.PENDING: 'emails/transaction_pending_email.html',
+            constants.FAILED: 'emails/transaction_failed_email.html',
+            constants.SUCCESSFUL: 'emails/transaction_complete_email.html',
+        }
+        subjects = {
+            constants.PENDING: 'Transaction Pending',
+            constants.FAILED: 'Transaction Failed',
+            constants.SUCCESSFUL: 'Transaction Completed',
+        }
+
+        template = templates.get(transfer.status)
+        subject = subjects.get(transfer.status)
+
+        if not template or not subject:
+            return
+
+        context = {
+            'name': user.get_full_name(),
+            'amount': f'{transfer.account.currency}{transfer.amount:.2f}',
+            'date': timezone.localtime(),
+            'currency': transfer.account.currency,
+            'account_number': transfer.beneficiary_account,
+            'summery': transfer.description,
+            'balance': f'{transfer.account.currency}{transfer.account.balance:.2f}',
+        }
+
+        try:
+            send_email_threaded(
+                subject=subject,
+                to_email=user.email,
+                context=context,
+                html_template=template
+            )
+        except Exception as e:
+            print(f"Email not sent: {e}")
+
+
+class InternationalTransferView(CustomerTransactionCreateMixin):
+    form_class = forms.CustomerTransactionForm
+    template_name = 'customer/transactions/international_transfer.html'
 
     def get_initial(self):
         now = timezone.localtime()

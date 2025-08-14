@@ -3,17 +3,35 @@
 {% load static %}
 
 {% block content %}
+<style>
+	.failure-card {
+		background: linear-gradient(
+			135deg,
+			rgba(220, 53, 69, 0.15) 0%,   /* Soft red with low opacity */
+			rgba(255, 99, 132, 0.25) 100% /* Lighter red with medium opacity */
+		);
+		border: 1px solid rgba(220, 53, 69, 0.5); /* Bootstrap danger red with opacity */
+		color: #721c24; /* Dark red text */
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(220, 53, 69, 0.1); /* subtle red shadow */
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	}
+
+</style>
 <div class="other_content">
 	<div class="container py-5">
 		<div class="row align-item-cnter justify-content-center">
 			<div class="col-md-6">
-				<div class="card">
+				<div class="card failure-card">
 					<h5 class="text-center text-danger pt-3">Transaction Failed</h5>
 					<hr>
-					<!-- <p class="px-5 lead">Dear {{request.user.first_name}} {{request.user.last_name}},</p> -->
-					<p class="px-5 py-0">Your Transaction Failed due to unrecognized ip address. Please try again or contact our support team for more information.</p>
+					<h5 class="px-3">We regret to inform you that your recent transaction was unsuccessful.</h5>
+					<p class="px-3 py-0">
+					Please review your transaction details and try again. For further assistance, contact our customer support team.
+					</p>
 					<hr>
-					<a href="{% url 'customer:dashboard' %}" class="btn btn-secondary btn-sm fw-bold w-100 text-white"><i class="fa-solid fa-arrow-left"></i> Go back to Dashboard</a>
+					<a href="{% url 'customer:dashboard' %}" class="btn btn-secondary btn-sm fw-bold w-100 text-white btn-sm"><i class="fa-solid fa-arrow-left"></i> Go back to Dashboard</a>
 				</div>		
 			</div>		
 		</div>
