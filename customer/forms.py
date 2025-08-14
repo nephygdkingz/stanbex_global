@@ -1,6 +1,7 @@
 from decimal import Decimal
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import SetPasswordForm
 
 from transaction.models import Transaction
 from transaction.forms import DateInput, TimeInput, BootstrapFormMixin
@@ -81,3 +82,11 @@ class UpdateCustomerAccountForm(forms.ModelForm):
         for name, field in self.fields.items():
             if name != 'birth_date':
                 field.widget.attrs.update({'class': 'form-control'})
+
+
+class SetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control mb-3'})

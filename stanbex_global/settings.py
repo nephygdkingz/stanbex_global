@@ -147,39 +147,39 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'Stanbex Global <contact@dewtrustefb.com>'
 
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,  # Keeps the default Django loggers
-    'formatters': {
-        'verbose': {
-            'format': '[{levelname}] {asctime} {name}: {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '[{levelname}] {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',  # You can use 'simple' if preferred
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',  # Change to 'DEBUG' to see more details
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'utils.email_utils': {  # Match the logger name from your utility
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,  # Keeps the default Django loggers
+#     'formatters': {
+#         'verbose': {
+#             'format': '[{levelname}] {asctime} {name}: {message}',
+#             'style': '{',
+#         },
+#         'simple': {
+#             'format': '[{levelname}] {message}',
+#             'style': '{',
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'verbose',  # You can use 'simple' if preferred
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'INFO',  # Change to 'DEBUG' to see more details
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'INFO',
+#             'propagate': True,
+#         },
+#         'utils.email_utils': {  # Match the logger name from your utility
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#     },
+# }

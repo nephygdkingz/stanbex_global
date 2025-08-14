@@ -9,6 +9,9 @@ urlpatterns = [
     path('statement/', views.userAccountStatement, name='account_statement'),
     path('loan/', views.loan, name='loan'),
     path('setting/', views.AccountSetting, name='account_setting'),
+    path('change-password/', views.changePassword, name='change_password'),
+    path('customer_care/', views.customer_care, name='customer_care'),
+    path('suspended/', views.customerSuspended, name='suspended'),
 
     # transfer
     path("local-transfer/", views.LocalTransferView.as_view(), name="local_transfer"),

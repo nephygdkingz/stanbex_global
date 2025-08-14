@@ -1,0 +1,44 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="other_content">
+	<div class="container py-5">
+		<div class="row align-item-cnter justify-content-center">
+			<div class="col-md-6">
+				<div class="card shadow-lg">
+					<h5 class="text-center text-white py-2 bg-primary">Send Email To Customer Care</h5>
+					{% include '../alerts/messages_alert.html' %}
+					{% include "../alerts/form_errors.html" with form=form %}
+					<div class="card-body">
+						<form method="POST" class="js-submit-spinner">
+							{% csrf_token %}
+							<div class="mb-3">
+								<label for="name" class="form-label">Name:</label>
+								<input type="text" name="name" class="form-control" id="name">
+							</div>
+							<div class="mb-3">
+								<label for="email" class="form-label">Email Address</label>
+								<input type="email" name="email" class="form-control" id="email" placeholder="name@example.com">
+							</div>
+							<div class="mb-3">
+								<label for="subject" class="form-label">Subject:</label>
+								<input type="text" name="subject" class="form-control" id="subject">
+							</div>
+							<div class="mb-3">
+								<label for="message" class="form-label">Message</label>
+								<textarea class="form-control" name="message" id="message" rows="3"></textarea>
+							</div>
+
+							<button type="submit" class="btn btn-primary w-100 float-end fw-bold btn-sm">
+                                    <span class="btn-text">Send Message</span>
+                            </button>	
+						</form>
+						
+					</div>
+				</div>		
+			</div>		
+		</div>
+	</div>
+</div>
+{% endblock %}
