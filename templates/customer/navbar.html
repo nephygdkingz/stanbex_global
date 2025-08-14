@@ -48,9 +48,10 @@
       <a href="{% url 'customer:local_transfer' %}"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a>
       <!-- <a href="{% url 'customer:local_transfer' %}" data-bs-toggle="modal" data-bs-target="#transaferType"><i class="fa-solid fa-money-bill-transfer me-2"></i>Funds Transfer</a> -->
       
-      <a href=""><i class="fa fa-sign-language me-2"></i>Apply for Loans</a>
+      <a href="{% url 'customer:loan' %}"><i class="fa fa-sign-language me-2"></i>Apply for Loans</a>
       <a href=""><i class="fa fa-phone me-2"></i>Get Help</a>
-      <a href=""><i class="fa fa-upload me-1"></i>Update Picture</a>
+      <!-- <a href=""><i class="fa fa-upload me-1"></i>Update Picture</a> -->
+      <a href="{% url 'customer:account_setting' %}"><i class="fa fa-upload me-1"></i>Update Account</a>
       <a href=""><i class="fa fa-unlock-alt me-2"></i>Change Password</a>
       <a href="{% url 'account:logout' %}" class="logout_btn fw-bold">Logout <i class="fa-solid fa-arrow-right-from-bracket ms-3"></i></a>
     {% endif %}

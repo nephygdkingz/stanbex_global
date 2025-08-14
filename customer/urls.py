@@ -7,10 +7,13 @@ app_name = 'customer'
 urlpatterns = [
     path('dashboard/', views.customer_dashboard, name='dashboard'),
     path('statement/', views.userAccountStatement, name='account_statement'),
+    path('loan/', views.loan, name='loan'),
+    path('setting/', views.AccountSetting, name='account_setting'),
 
     # transfer
-    path("account/local-transfer/", views.LocalTransferView.as_view(), name="local_transfer"),
+    path("local-transfer/", views.LocalTransferView.as_view(), name="local_transfer"),
     path('transaction/verify/', views.transactionVerify, name='verify'),
     path('transaction/completed/', views.transactionComplete, name='complete'),
     path('transaction/failed/', views.transactionFailed, name='failed'),
+    path('transaction/pending/', views.transactionPending, name='pending'),
 ]

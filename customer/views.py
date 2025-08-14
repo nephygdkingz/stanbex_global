@@ -116,9 +116,36 @@ def userAccountStatement(request):
 
     context = {
         'page_obj': page_obj,
-        'account': user_account
+        'account': user_account,
+        'user_ip_address': get_client_ip(request),
     }
     return render(request, 'customer/account_statement.html', context)
+
+@login_required(login_url='account:login')
+@check_suspended_user
+def loan(request):
+    context = {'user_ip_address': get_client_ip(request)}
+    return render(request, 'customer/loan.html', context)
+
+
+@login_required(login_url='account:login')
+@check_suspended_user
+def AccountSetting(request):
+    user = request.user
+    user_form = forms.UpdateCustomerAccountForm(instance=user)
+    if request.method == 'POST':
+        user_form = forms.UpdateCustomerAccountForm(request.POST, instance=user)
+        if user_form.is_valid():
+            user_form.save()
+            
+            messages.info(request, 'Your account was updated successfully!')
+            return redirect('customer:account_setting')
+
+    context = {
+        'form':user_form,
+        'user_ip_address': get_client_ip(request),
+        }
+    return render(request, 'customer/setting.html', context)
 
 
 # transactions
@@ -327,3 +354,9 @@ def transactionComplete(request):
 @check_suspended_user
 def transactionFailed(request):
     return render(request, 'customer/transactions/Failed.html')
+
+
+@login_required(login_url='account:login')
+@check_suspended_user
+def transactionPending(request):
+    return render(request, 'customer/transactions/pending.html')

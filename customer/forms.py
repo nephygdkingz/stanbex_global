@@ -1,8 +1,10 @@
 from decimal import Decimal
 from django import forms
+from django.contrib.auth import get_user_model
 
 from transaction.models import Transaction
 from transaction.forms import DateInput, TimeInput, BootstrapFormMixin
+User = get_user_model()
 
 class CustomerTransactionForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
@@ -59,3 +61,23 @@ class CustomerTransactionForm(BootstrapFormMixin, forms.ModelForm):
                 f"You have {balance} {account.currency}. You cannot transfer more than your balance."
             )
         return amount
+    
+
+class UpdateCustomerAccountForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'gender', 'birth_date', 'title']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Birth date with HTML5 date picker
+        self.fields['birth_date'].widget = DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control'
+        })
+
+        # Add Bootstrap class to all other fields
+        for name, field in self.fields.items():
+            if name != 'birth_date':
+                field.widget.attrs.update({'class': 'form-control'})

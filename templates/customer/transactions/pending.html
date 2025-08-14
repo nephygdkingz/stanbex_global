@@ -1,0 +1,22 @@
+{% extends '../base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="other_content">
+	<div class="container py-5">
+		<div class="row align-item-cnter justify-content-center py-5">
+			<div class="col-md-6">
+				<div class="card">
+					<h5 class="text-center text-warning pt-3">Transaction Pending</h5>
+					<hr>
+					<p class="px-4">Please be informed that the transaction you initiated right now is Pending.<br>				
+					This is a security measure as your transaction details will be reviewed shortly, and can be approved or declined within 48 hours.</p>
+					<hr>
+					<a href="{% url 'customer:dashboard' %}" class="btn btn-secondary fw-bold w-100 text-white btn-sm"><i class="fa-solid fa-arrow-left"></i> Go back to Dashboard</a>
+				</div>		
+			</div>		
+		</div>
+	</div>
+</div>
+{% endblock %}

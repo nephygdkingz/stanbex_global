@@ -1,0 +1,27 @@
+{% extends './base.html' %}
+
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<div class="other_content">
+	<div class="container-fluid py-3">
+		
+		<div class="card shadow-lg">
+			<h5 class="text-center text-white py-1 bg-primary">Loans</h5>
+			<div class="card-body">
+				<div class="row justify-content-center align-item-center">
+					<div class="col-md-10">
+						<center>
+							<i class="fa fa-exclamation-circle fa-2xl mb-4" aria-hidden="true"></i>
+						</center>
+						
+						<p>There is no Loan Plan available for you, Please contact our <a href="">customer care </a> for a loan request.</p>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
