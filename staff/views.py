@@ -14,6 +14,7 @@ from .forms import UpdateUserAccountForm, UpdateUserBankAccountForm, RequiredCod
 from codes.models import OtpCode
 from . import forms
 from transaction import constants
+from notification.email_utils import send_email_threaded, send_email_sync
 
 @login_required(login_url='account:login')
 @staff_required_redirect
@@ -265,3 +266,79 @@ class WithdrawMoneyView(TransactionCreateMixin):
         )
 
         return super().form_valid(form)
+    
+@login_required(login_url='account:login')
+@staff_required_redirect
+def approve_transaction(request, pk):
+    transaction = get_object_or_404(Transaction, id=pk)
+
+    transaction.status = "Successful"
+    transaction.save()
+
+    user = transaction.account.user
+    email = user.email
+    full_name = user.get_full_name()
+
+    context = {
+        'name': full_name,
+        'amount': transaction.amount,
+        'date': transaction.date_created,
+        'currency': transaction.account.currency,
+    }
+
+    try:
+        send_email_threaded(
+            subject='Transaction Approved',
+            to_email=email,
+            context=context,
+            html_template='emails/approved.html',
+        )
+    except Exception as e:
+        # Use logging in production instead of print
+        print(f"[Email Error] Failed to send approval email to {email}: {e}")
+
+    messages.success(request, 'Transaction approved successfully.')
+    return redirect('staff:pending_transactions')
+
+
+@login_required(login_url='account:login')
+@staff_required_redirect
+def decline_transaction(request, pk):
+    transaction = get_object_or_404(Transaction, id=pk)
+    amount = transaction.amount
+    account = transaction.account
+
+    user_bank_account = get_object_or_404(UserBankAccount, account_no=account.account_no)
+    user = user_bank_account.user
+
+    # Update transaction
+    transaction.status = "Failed"
+    transaction.balance_after_transaction += amount
+    transaction.save()
+
+    # Update user bank account balance
+    user_bank_account.balance = transaction.balance_after_transaction
+    user_bank_account.save()
+
+    # Prepare and send email
+    template = 'emails/declined.html'
+    context = {
+        'name': user.get_full_name(),
+        'amount': amount,
+        'date': transaction.date_created,
+        'currency': account.currency,
+    }
+
+    try:
+        send_email_threaded(
+            subject='Transaction Declined',
+            to_email=user.email,
+            context=context,
+            html_template=template,
+        )
+    except Exception as e:
+        # Use logging in production instead of print
+        print(f"[Email Error] Failed to send approval email to {user.email}: {e}")
+
+    messages.success(request, 'Transaction was declined successfully.')
+    return redirect('staff:pending_transactions')

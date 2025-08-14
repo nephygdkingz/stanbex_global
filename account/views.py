@@ -9,8 +9,7 @@ from django.http import HttpResponseRedirect
 from .models import MyUser
 from .forms import (UserBankAccountForm, UserRegistrationForm)
 from codes.forms import CodeForm
-from .utils import handle_successful_otp, handle_resend, send_otp_with_cooldown, RESEND_COOLDOWN_SECONDS
-
+from .utils import handle_successful_otp, handle_resend
 
 def registerUser(request):
     if request.method == 'POST':
@@ -63,7 +62,7 @@ def loginUser(request):
                     
                     else:
                         login(request, user)
-                        return redirect('customer:customer_dashboard')
+                        return redirect('customer:dashboard')
                 
         else:
             messages.error(request, 'Username or Password is incorrect')

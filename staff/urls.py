@@ -20,4 +20,6 @@ urlpatterns = [
     # transaction operations
     path("deposit/", views.DepositMoneyView.as_view(), name="deposit_money"),
     path("withdraw/", views.WithdrawMoneyView.as_view(), name="withdraw_money"),
+    path('approve/<str:pk>/', views.approve_transaction, name='approve'),
+    path('decline/<str:pk>/', views.decline_transaction, name='decline'),
 ]

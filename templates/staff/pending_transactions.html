@@ -35,8 +35,8 @@
 					      <td>{{transaction.description}}</td>
 					      <td><strong>{{transaction.balance_after_transaction|intcomma}}</strong></td>
 					      <td>{{transaction.transaction_date}} {{transaction.transaction_time}}</td>
-					      <td><a href="{% url 'transaction:approve' transaction.id %}" class="btn btn-success btn-sm fw-bold btn-condensed">Approve</a></td>
-					      <td><a href="{% url 'transaction:decline' transaction.id %}" class="btn btn-danger btn-sm fw-bold btn-condensed">Decline</a></td>				      
+					      <td><a href="{% url 'staff:approve' transaction.id %}" class="btn btn-success btn-sm fw-bold btn-condensed">Approve</a></td>
+					      <td><a href="{% url 'staff:decline' transaction.id %}" class="btn btn-danger btn-sm fw-bold btn-condensed">Decline</a></td>				      
 					    </tr>
 					  </tbody>						
 					  {% endfor %}
