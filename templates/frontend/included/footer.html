@@ -11,7 +11,7 @@
                 <div class="col-xl-4 col-lg-4 col-md-6">
                 <div class="tp-footer-widget tp-footer-col-1 mb-50">
                     <div class="tp-footer-logo mb-20">
-                    <a href="index.html"> <img src="{% static 'frontend/assets/img/logo/logo.png' %}" alt="footer-logo"></a>
+                    <a href="index.html"> <img src="{% static 'frontend/logo/logo1-white.svg' %}" alt="footer-logo"></a>
                     </div>
                     <div class="tp-footer-widget-content">
                         <p>Payment processing is a critical component of any business that sells goods or se Payment processing is a critical component of any.</p>
@@ -66,7 +66,7 @@
                             <a href="https://maps.app.goo.gl/VX8K5AcShxoDNgpX7" target="_blank"><i class="fa-sharp fa-solid fa-location-dot"></i> 147 Aptos Ave, San Francisco, CA 94127, United States</a>
                             </div>
                             <div class="tp-footer-widget-contact-inner">
-                            <a href="tel:123456765"><i class="fa-solid fa-phone"></i> (629) 555-0129</a>
+                            <a href="tel:123456765"><i class="fa-solid fa-phone"></i> (380) 278-4155</a>
                             </div>
                             <div class="tp-footer-widget-contact-inner">
                             <a href="mailto:info@example.com" style="font-size: 14px !important;"><i class="fa-solid fa-envelope"></i>support@stanbexglobalonline.com</a>
@@ -88,11 +88,11 @@
                 </div>
                 <div class="col-md-12 col-lg-6">
                 <div class="tp-footer-copyright-inner text-lg-end">
-                    <a href="#">About us</a>
-                    <a href="#">Register</a>
-                    <a href="#">Services</a>
-                    <a href="#">Login</a>
-                    <a href="#">Contact Us</a>
+                    <a href="{% url 'frontend:about' %}">About us</a>
+                    <a href="{% url 'account:register' %}">Register</a>
+                    <a href="/">Services</a>
+                    <a href="{% url 'account:login' %}">Login</a>
+                    <a href="{% url 'frontend:contact' %}">Contact Us</a>
                 </div>
                 </div>
             </div>
