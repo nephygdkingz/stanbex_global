@@ -32,6 +32,9 @@
       <a href="{% url 'staff:dashboard' %}" class="active"><i class="fa-solid fa-house me-2"></i>Dashboard</a>
       <a href="{% url 'staff:account_holders' %}"><i class="fa-solid fa-house me-2"></i>Account Holders</a>
       <a href="{% url 'staff:all_transactions' %}"><i class="fa-solid fa-house me-2"></i>Transaction History</a>
+      <a href="{% url 'staff:pending_transactions' %}"><i class="fa-solid fa-house me-2"></i>Pending Transactions</a>
+      <a href="{% url 'staff:add_required_code' %}"><i class="fa-solid fa-house me-2"></i>Required Code</a>
+      <a href="{% url 'staff:all_otp' %}"><i class="fa-solid fa-house me-2"></i>OTP Codes</a>
     {% else%}
       {% if request.user.status == 'suspended' %}
         <a href="#" data-bs-toggle="modal" data-bs-target="#suspendedModal" class="active"><i class="fa-solid fa-house me-2"></i>Dashboard</a>

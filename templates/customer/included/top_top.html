@@ -19,12 +19,17 @@
             </div>
             <div class="col-md-4 mt-5">
               <div class="">
-                {% if request.user.status == 'suspended' %}
-                  <a href="" class="btn btn-outline-warning btn-sm text-white px-4 data-bs-toggle="modal" data-bs-target="#suspendedModal"">E-Statement</a>
-                  <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#suspendedModal" href="#">Funds Transfer</a>
+                {% if request.user.is_staff %}
+                  <a href="{% url 'customer:account_statement' %}" class="btn btn-outline-warning btn-sm text-white px-4">Fund Account</a>
+                  <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#transaferType">Debit Account</a>
                 {% else %}
-                  <a href="{% url 'customer:account_statement' %}" class="btn btn-outline-warning btn-sm text-white px-4">E-Statement</a>
-                  <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#transaferType">Funds Transfer</a>
+                  {% if request.user.status == 'suspended' %}
+                    <a href="" class="btn btn-outline-warning btn-sm text-white px-4 data-bs-toggle="modal" data-bs-target="#suspendedModal"">E-Statement</a>
+                    <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#suspendedModal" href="#">Funds Transfer</a>
+                  {% else %}
+                    <a href="{% url 'customer:account_statement' %}" class="btn btn-outline-warning btn-sm text-white px-4">E-Statement</a>
+                    <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#transaferType">Funds Transfer</a>
+                  {% endif %}
                 {% endif %}
               </div>
             </div>

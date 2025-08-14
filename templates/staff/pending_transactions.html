@@ -1,0 +1,49 @@
+{% extends '../customer/base.html' %}
+
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<main>
+<div class="container-fluid py-5">
+		<div class="card">
+			<h4 class="text-center text-primary py-1">Pending Transactions</h4>
+			{% include '../alerts/messages_alert.html' %}
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-hover table-sm table-condensed">
+					  <thead class="table-dark">
+					    <tr>
+					      <th scope="col">Account Holder</th>
+					      <th scope="col">Beneficiary Account</th>
+					      <th scope="col">Bank Name</th>
+					      <th scope="col">Amount</th>
+					      <th scope="col">Narration</th>
+					      <th scope="col">Balance</th>			      
+					      <th scope="col">Date & Time</th>
+					      <th scope="col"></th>
+					      <th scope="col"></th>
+					    </tr>
+					  </thead>
+					  {% for transaction in pending_transactions %}
+					  <tbody class="table-white">
+					    <tr>
+					      <td>{{transaction.account.user.first_name}} {{transaction.account.user.last_name}} </td>
+					      <td>{{transaction.beneficiary_name}} ({{transaction.beneficiary_account}})</td>
+					      <td>{{transaction.beneficiary_bank}}</td>
+					      <td class="{% if transaction.status == 'Success' %} text-success {% elif transaction.status == 'Pending'  %} text-warning {% else %} text-danger {% endif %}"><strong>{{transaction.amount|intcomma}}</strong> ({{transaction.account.currency}})</td>
+					      <td>{{transaction.description}}</td>
+					      <td><strong>{{transaction.balance_after_transaction|intcomma}}</strong></td>
+					      <td>{{transaction.transaction_date}} {{transaction.transaction_time}}</td>
+					      <td><a href="{% url 'transaction:approve' transaction.id %}" class="btn btn-success btn-sm fw-bold btn-condensed">Approve</a></td>
+					      <td><a href="{% url 'transaction:decline' transaction.id %}" class="btn btn-danger btn-sm fw-bold btn-condensed">Decline</a></td>				      
+					    </tr>
+					  </tbody>						
+					  {% endfor %}
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}

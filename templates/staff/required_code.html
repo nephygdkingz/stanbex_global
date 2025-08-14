@@ -1,0 +1,79 @@
+{% extends '../customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+	<div class="container py-4">
+		<div class="row align-item-center justify-content-center">
+			<div class="col-md-5">
+				<div class="card">
+					<h5 class="text-center text-white bg-primary py-2 mt-3">Add Required Code For a Customer</h5>
+					{% include '../alerts/messages_alert.html' %}
+					{% include "../alerts/form_errors.html" with form=form %}
+					<div class="card-body">
+						{{ form.non_field_errors }}
+						<form method="POST" class="js-submit-spinner">
+							{% csrf_token %}
+
+							<div class="mb-3">
+							  {{ form.user.errors }}
+							  <label for="{{ form.user.id_for_label }}" class="form-label fw-bold">Customer Email</label>
+							  {{ form.user }}
+							</div>
+
+							<div class="mb-3">
+							  {{ form.code_name.errors }}
+							  <label for="{{ form.code_name.id_for_label }}" class="form-label fw-bold">Type Of Code:</label>
+							  {{ form.code_name }}
+							</div>
+
+							<div class="mb-3">
+							  {{ form.code_number.errors }}
+							  <label for="{{ form.code_number.id_for_label }}" class="form-label fw-bold">Code Number</label>
+							  {{ form.code_number }}
+							</div>
+
+                            <button type="submit" class="btn btn-primary w-100 fw-bold">
+                                <span class="btn-text">Submit</span>
+                            </button>
+							<!-- <input type="submit" value="Add Code" class="btn btn-primary fw-bold w-100 mt-2"> -->
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row align-item-cnter justify-content-center py-5">
+		<div class="col-md-10">
+			<div class="card">
+				<h5 class="text-center text-primary mt-2">Required Code List</h5>
+				<div class="card-body">
+					<table class="table table-condensed">
+					  <thead>
+					    <tr>
+					      <th scope="col">Customer</th>		
+					      <th scope="col">Code Type</th>
+					      <th scope="col">Code</th>
+					      <th scope="col"></th>
+					    </tr>
+					  </thead>
+					  {% for required in required_code_customers %}
+					  <tbody>
+					    <tr>
+					      <td>{{required.user}}</td>					      					
+					      <td>{{required.code_name}}</td>
+					      <td>{{required.code_number}}</td>
+					      <td><a href="{% url 'staff:delete_code' required.id %}" class="btn btn-danger btn-sm fw-bold btn-condensed">Delete</a></td>
+					    </tr>
+					  </tbody>
+					  {% endfor %}
+					</table>
+				</div>
+				
+			</div>
+		</div>	
+	</div>
+	</div>
+</main>
+{% endblock %}

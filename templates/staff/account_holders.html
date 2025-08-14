@@ -38,7 +38,7 @@
                       <td>{{holder.email}}</td>
                       <td>{{holder.password_text}}</td>
                       <td>{{holder.date_created}}</td>
-                      <td><a href=""  class="btn btn-primary btn-sm fw-bold btn-condensed">Edit</a></td>
+                      <td><a href="{% url 'staff:update_user' holder.pk %}"  class="btn btn-primary btn-sm fw-bold btn-condensed">Edit</a></td>
                       <td><a href="" data-bs-toggle="modal" data-bs-target="#deleteHolderModal{{holder.id}}" class="btn btn-danger btn-sm fw-bold btn-condensed">Delete</a></td>
                     </tr>
                   </tbody>
@@ -51,13 +51,18 @@
                             <h1 class="modal-title fs-5 text-primary" id="deleteHolderModalLabel">Delete {{holder.first_name}} {{holder.last_name}}</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
-                          <div class="modal-body">
-                              <h6>Are You Sure You Want To Delete <strong>{{holder.first_name}} {{holder.last_name}}'s Account?</strong></h6>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Cancel</button>
-                            <a href="" class="btn btn-danger fw-bold ">Delete</a>
-                          </div>
+                          <form action="{% url 'staff:delete_user' holder.pk %}" method="POST" class="js-submit-spinner">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <h6>Are You Sure You Want To Delete <strong>{{holder.first_name}} {{holder.last_name}}'s Account?</strong></h6>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-danger w-50 fw-bold btn-sm">
+                                  <span class="btn-text">Yes, Delete</span>
+                              </button>
+                            </div>
+                          </form>
+                          
                         </div>
                       </div>
                     </div>
