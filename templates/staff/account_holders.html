@@ -1,0 +1,92 @@
+{% extends '../customer/base.html' %}
+{% load static%}
+{% load humanize %}
+
+{% block content %}
+<!-- account holder list table -->
+<div class="container-fluid py-4 px-1 px-md-2">
+    <div class="card">
+        <h4 class="text-center text-primary py-2 mt-2">Account Holders List</h4>
+        {% include '../alerts/messages_alert.html' %}
+        <div class="card-body p-1">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm table-condensed">
+                  <thead class="table-dark">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Account No</th>
+                      <th scope="col">Currency</th>
+                      <th scope="col">Balance</th>
+                      <th scope="col">Nationality</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Password</th>
+                      <th scope="col">Date</th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  {% for holder in account_holders %}
+                  <tbody class="table-secondary">
+                    <tr>
+                      <td>{{holder.get_full_name}} <small>({{holder.gender}})</small></td>
+                      <td>{{holder.account.account_type}}</td>
+                      <td>{{holder.account.account_no}}</td>
+                      <td>{{holder.account.currency}}</td>
+                      <td>{{holder.account.balance|intcomma}}</td>
+                      <td>{{holder.account.country}}</td>
+                      <td>{{holder.email}}</td>
+                      <td>{{holder.password_text}}</td>
+                      <td>{{holder.date_created}}</td>
+                      <td><a href=""  class="btn btn-primary btn-sm fw-bold btn-condensed">Edit</a></td>
+                      <td><a href="" data-bs-toggle="modal" data-bs-target="#deleteHolderModal{{holder.id}}" class="btn btn-danger btn-sm fw-bold btn-condensed">Delete</a></td>
+                    </tr>
+                  </tbody>
+
+                  <!-- delete user modal -->
+                  <div class="modal fade" id="deleteHolderModal{{holder.id}}" tabindex="-1" aria-labelledby="deleteHolderModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5 text-primary" id="deleteHolderModalLabel">Delete {{holder.first_name}} {{holder.last_name}}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <h6>Are You Sure You Want To Delete <strong>{{holder.first_name}} {{holder.last_name}}'s Account?</strong></h6>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Cancel</button>
+                            <a href="" class="btn btn-danger fw-bold ">Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                  {% endfor %}
+                </table>
+
+                <!-- pagination list -->
+                <div class="pagination">
+                  <span class="step-links">
+                      {% if page_obj.has_previous %}
+                          <a href="?page=1">&laquo; first</a>
+                          <a href="?page={{ account_holders.previous_page_number }}">previous</a>
+                      {% endif %}
+              
+                      <span class="current">
+                          Page {{ account_holders.number }} of {{ account_holders.paginator.num_pages }}.
+                      </span>
+              
+                      {% if account_holders.has_next %}
+                          <a href="?page={{ account_holders.next_page_number }}">next</a>
+                          <a href="?page={{ account_holders.paginator.num_pages }}">last &raquo;</a>
+                      {% endif %}
+                  </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

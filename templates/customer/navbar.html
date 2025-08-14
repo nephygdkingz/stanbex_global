@@ -30,6 +30,8 @@
     </div> -->
     {% if request.user.is_staff%}
       <a href="{% url 'staff:dashboard' %}" class="active"><i class="fa-solid fa-house me-2"></i>Dashboard</a>
+      <a href="{% url 'staff:account_holders' %}"><i class="fa-solid fa-house me-2"></i>Account Holders</a>
+      <a href="{% url 'staff:all_transactions' %}"><i class="fa-solid fa-house me-2"></i>Transaction History</a>
     {% else%}
       {% if request.user.status == 'suspended' %}
         <a href="#" data-bs-toggle="modal" data-bs-target="#suspendedModal" class="active"><i class="fa-solid fa-house me-2"></i>Dashboard</a>

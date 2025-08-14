@@ -1,0 +1,75 @@
+{% extends '../customer/base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<main>
+<div class="container-fluid py-5">
+		<div class="card">
+			<h4 class="text-center text-primary py-1">Transactions History</h4>
+			{% include '../alerts/messages_alert.html' %}
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-hover table-sm table-condensed">
+					  <thead class="table-dark">
+					  	<tr>
+                          <th scope="col">Account Holder</th>
+					      <th scope="col">Transaction Date</th>
+					      <th scope="col">Type</th>
+					      <th scope="col">Reference No.</th>	
+					      <!-- <th scope="col">Narration</th> -->
+					      <th scope="col">Account Name</th>
+					      <th scope="col">Account No.</th>
+					      <th scope="col">Amount</th>
+					      		      
+					      <th scope="col">Status</th>
+					      <th scope="col">Balance</th>
+					      <th scope="col"></th>
+					    </tr>
+					  </thead>
+					  {% for transaction in page_obj %}
+					  <tbody class="table-white">
+					    <tr>
+                          <td>{{transaction.account.user.get_full_name}}</td>
+				    	  <td>{{transaction.transaction_date}} {{transaction.transaction_time}}</td>
+				    	  <td>{{transaction.transaction_type}}</td>
+				    	  <td>{{transaction.ref_code|slice:":12"}}</td>	
+				    	  <!-- <td>{{transaction.description}}</td> -->
+				    	  <td>{{transaction.beneficiary_name}}</td>
+				    	  <td>{{transaction.beneficiary_account}}</td>
+					      <td class="{% if transaction.transaction_type == 'CR' %} text-success {% else %} text-danger {% endif %}"><strong>{% if transaction.transaction_type == 'DR' %}-{% endif %}{{transaction.account.currency}}{{transaction.amount|intcomma}}</strong></td>			      
+						  <td class="{% if transaction.status == 'Successful' %} text-success {% elif transaction.status == 'Pending'  %} text-warning {% else %} text-danger {% endif %}"><strong>{{transaction.status}}</strong></td>				     
+					      <td>{{transaction.account.currency}}<strong>{{transaction.balance_after_transaction|intcomma}}</strong></td>
+					    
+					      <td><a href="" class="btn btn-danger btn-sm fw-bold btn-condensed">Delete</a></td>		      
+					    </tr>
+					  </tbody>
+						
+					  {% endfor %}
+					</table>
+
+                    <!-- pagination -->
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                            {% endif %}
+                    
+                            <span class="current">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                            </span>
+                    
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}
+
