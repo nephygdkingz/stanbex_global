@@ -79,8 +79,8 @@ def user_account_post_save(sender, instance, created,*args, **kwargs):
         f_nums = random.choices(nums, k=1)
         r = f_nums[0]
         final_r = str(int(r) + instance.id)
-        instance.account_no = final_r[1:7]
-        # instance.account_no = final_r[7:17] for posgres
+        # instance.account_no = final_r[1:7]
+        instance.account_no = final_r[7:17]
         instance.save()
 
 post_save.connect(user_account_post_save, sender=UserBankAccount)
