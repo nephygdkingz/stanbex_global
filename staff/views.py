@@ -287,7 +287,7 @@ def approve_transaction(request, pk):
     }
 
     try:
-        send_email_threaded(
+        send_email_sync(
             subject='Transaction Approved',
             to_email=email,
             context=context,
@@ -330,7 +330,7 @@ def decline_transaction(request, pk):
     }
 
     try:
-        send_email_threaded(
+        send_email_sync(
             subject='Transaction Declined',
             to_email=user.email,
             context=context,

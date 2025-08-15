@@ -267,7 +267,6 @@ def customer_care(request):
             send_email_sync(
                 subject=subject,
                 to_email='support@stanbexglobalonline.com',
-                # to_email='support@stanbexglobalonline.com',
                 html_template=final_message,
                 context=context,
             )
@@ -375,7 +374,7 @@ class LocalTransferView(CustomerTransactionCreateMixin):
         }
 
         try:
-            send_email_threaded(
+            send_email_sync(
                 subject=subject,
                 to_email=user.email,
                 context=context,
@@ -466,7 +465,7 @@ class InternationalTransferView(CustomerTransactionCreateMixin):
         }
 
         try:
-            send_email_threaded(
+            send_email_sync(
                 subject=subject,
                 to_email=user.email,
                 context=context,
@@ -543,7 +542,7 @@ def transactionVerify(request):
         }
 
         try:
-            send_email_threaded(
+            send_email_sync(
                 subject=email_subjects[transaction.status],
                 to_email=user.email,
                 context=context,

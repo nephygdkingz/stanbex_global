@@ -5,11 +5,11 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 
-from notification.email_utils import send_email_threaded
+from notification.email_utils import send_email_threaded, send_email_sync
 
 def send_otp_email(user):
     try:
-        send_email_threaded(
+        send_email_sync(
             subject='Account Login OTP Code',
             to_email=user.email,
             context={
