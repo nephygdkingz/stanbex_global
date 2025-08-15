@@ -41,7 +41,7 @@
 						  <td class="{% if transaction.status == 'Successful' %} text-success {% elif transaction.status == 'Pending'  %} text-warning {% else %} text-danger {% endif %}"><strong>{{transaction.status}}</strong></td>				     
 					      <td>{{transaction.account.currency}}<strong>{{transaction.balance_after_transaction|intcomma}}</strong></td>
 					    
-					      <td><a href="" class="btn btn-danger btn-sm fw-bold btn-condensed">Delete</a></td>		      
+					      <td><a href="{% url 'staff:delete_trans' transaction.pk %}" class="btn btn-danger btn-sm fw-bold btn-condensed">Delete</a></td>		      
 					    </tr>
 					  </tbody>
 						

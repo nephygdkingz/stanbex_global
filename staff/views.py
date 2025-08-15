@@ -342,3 +342,21 @@ def decline_transaction(request, pk):
 
     messages.success(request, 'Transaction was declined successfully.')
     return redirect('staff:pending_transactions')
+
+@login_required(login_url='account:login')
+@staff_required_redirect
+def delete_transaction(request, pk):
+    transaction = get_object_or_404(Transaction, id=pk)
+    account = transaction.account
+    user_bank_account = get_object_or_404(UserBankAccount, account_no=account.account_no)
+
+    if transaction.status != 'Failed':
+        if transaction.transaction_type == 'DR':
+            user_bank_account.balance += transaction.amount
+        else:  # Assuming 'CR'
+            user_bank_account.balance -= transaction.amount
+        user_bank_account.save()
+
+    transaction.delete()
+    messages.success(request, 'Transaction was deleted successfully.')
+    return redirect('staff:all_transactions')

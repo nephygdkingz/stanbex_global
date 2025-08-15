@@ -22,4 +22,5 @@ urlpatterns = [
     path("withdraw/", views.WithdrawMoneyView.as_view(), name="withdraw_money"),
     path('approve/<str:pk>/', views.approve_transaction, name='approve'),
     path('decline/<str:pk>/', views.decline_transaction, name='decline'),
+    path('delete_transaction/<str:pk>/', views.delete_transaction, name='delete_trans'),
 ]
