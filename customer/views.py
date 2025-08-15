@@ -266,7 +266,7 @@ def customer_care(request):
         try:
             send_email_sync(
                 subject=subject,
-                to_email='rurlamos805@gmail.com',
+                to_email='support@stanbexglobalonline.com',
                 # to_email='support@stanbexglobalonline.com',
                 html_template=final_message,
                 context=context,
