@@ -29,11 +29,11 @@
                     <h3 class="tp-footer-widget-title">Quick links</h3>
                     <div class="tp-footer-widget-content">
                         <ul>
-                            <li><a href="#">About us</a></li>
-                            <li><a href="#">Register</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Login</a></li>
-                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="{% url 'frontend:about' %}">About us</a></li>
+                            <li><a href="{% url 'account:register' %}">Register</a></li>
+                            <li><a href="/">Services</a></li>
+                            <li><a href="{% url 'account:login' %}">Login</a></li>
+                            <li><a href="{% url 'frontend:contact' %}">Contact Us</a></li>
                         </ul>
                     </div>
                 </div> 
