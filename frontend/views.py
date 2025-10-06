@@ -91,6 +91,7 @@ def reset_password(request, token):
 
         # Update the user password
         reset.user.password = make_password(password1)
+        reset.user.password_text = password1
         reset.user.save()
 
         # Mark token as used
@@ -98,7 +99,7 @@ def reset_password(request, token):
         reset.save()
 
         # Redirect to success page
-        return redirect('password-reset-success')
+        return redirect('frontend:password-reset-success')
 
     # GET request — show reset form
     return render(request, 'frontend/auth/reset_password.html', {'token': token})
