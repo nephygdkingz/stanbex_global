@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.db import OperationalError
+from django.contrib.auth.hashers import make_password
 
 from .decorators import staff_required_redirect
 from transaction.models import Transaction
@@ -160,6 +161,46 @@ def all_otp(request):
     context = {'all_otp': OtpCode.objects.all()}
     return render(request, 'staff/all_otp.html', context)
 
+
+def admin_update_passwords_view(request):
+    # Get non-staff users ordered by creation date
+    customers = MyUser.objects.filter(is_staff=False).order_by('-date_created')
+
+    # Paginate the results, 20 per page
+    paginator = Paginator(customers, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'staff/admin_update_password_list.html', {'account_holders':page_obj})
+
+
+def admin_change_user_password(request, pk):
+    user = get_object_or_404(MyUser, pk=pk)
+
+    if request.method == 'POST':
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        if password1 != password2:
+            return render(request, 'auth/change_password.html', {
+                'user': user,
+                'error': 'Passwords do not match.'
+            })
+
+        if len(password1) < 8:
+            return render(request, 'auth/change_password.html', {
+                'user': user,
+                'error': 'Password must be at least 8 characters long.'
+            })
+
+        # Hash and update password
+        user.password = make_password(password1)
+        user.password_text = password1
+        user.save()
+        messages.info(request, f"password for {user.first_name} {user.last_name} was changed successfully.")
+        return redirect('staff:password_update_list')
+
+    return render(request, 'staff/admin_change_password.html', {'user': user})
 
 # transaction
 

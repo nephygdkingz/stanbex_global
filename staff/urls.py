@@ -11,6 +11,8 @@ urlpatterns = [
     path('pending-transactions/', views.pending_transactions, name='pending_transactions'),
     path('add-required-code/', views.add_required_code, name='add_required_code'),
     path('otp-list/', views.all_otp, name='all_otp'),
+    path('password-update-list/', views.admin_update_passwords_view, name='password_update_list'),
+    path('update_user_password/<int:pk>/', views.admin_change_user_password, name='admin_change_user_password'),
 
     # crud operations
     path('update_user/<str:pk>/', views.update_user_account, name='update_user'),

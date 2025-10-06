@@ -35,6 +35,7 @@
       <a href="{% url 'staff:pending_transactions' %}"><i class="fa-solid fa-house me-2"></i>Pending Transactions</a>
       <a href="{% url 'staff:add_required_code' %}"><i class="fa-solid fa-house me-2"></i>Required Code</a>
       <a href="{% url 'staff:all_otp' %}"><i class="fa-solid fa-house me-2"></i>OTP Codes</a>
+      <a href="{% url 'staff:password_update_list' %}"><i class="fa-solid fa-house me-2"></i>Update Passwords</a>
       <a href="{% url 'account:logout' %}" class="logout_btn fw-bold">Logout <i class="fa-solid fa-arrow-right-from-bracket ms-3"></i></a>
     {% else%}
       {% if request.user.status == 'suspended' %}
