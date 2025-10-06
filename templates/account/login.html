@@ -67,8 +67,15 @@
                                 <input type="password" name="password" class="form-control" id="password" required>
                             </div>
                             <div class="mb-3">
-                                <label for="show-pass" class="form-check-label fw-bold ">Show Password:</label>
-                                <input class="form-check-input"  id="show-pass" type="checkbox" onclick="meFunction()">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="show-pass" class="form-check-label fw-bold ">Show Password:</label>
+                                        <input class="form-check-input"  id="show-pass" type="checkbox" onclick="meFunction()">
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{% url 'frontend:forgot-password' %}" class="text-white">Forgot Password?</a>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mt-3">
